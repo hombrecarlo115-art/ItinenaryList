@@ -24,7 +24,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Plus+Jakarta+Sans:wght@300..800&display=swap" rel="stylesheet">
     
     <style>
-        /* CSS @import Fallback for font rendering on iOS standalone home screens */
         @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Plus+Jakarta+Sans:wght@300..800&display=swap');
 
         body {
@@ -124,7 +123,6 @@
 
         .anim-zz-1 { animation: sleep-zz 3s infinite ease-out; }
         .anim-zz-2 { animation: sleep-zz 3s infinite ease-out 1s; }
-        .anim-zz-3 { animation: sleep-zz 3s infinite ease-out 2s; }
 
         input[type="date"], 
         input[type="time"],
@@ -212,7 +210,7 @@
                 </button>
                 <button onclick="switchPage('characters')" id="nav-btn-characters" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm cute-title transition text-left text-slate-500 hover:bg-slate-50 hover:text-slate-800">
                     <i data-lucide="user" class="w-4 h-4"></i>
-                    <span>Character & Backgrounds</span>
+                    <span>Companions & Sound</span>
                 </button>
                 <button onclick="switchPage('archive')" id="nav-btn-archive" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm cute-title transition text-left text-slate-500 hover:bg-slate-50 hover:text-slate-800">
                     <i data-lucide="archive" class="w-4 h-4"></i>
@@ -226,8 +224,8 @@
         </div>
 
         <div class="p-6 border-t border-orange-50 bg-amber-50/20 text-center">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">WanderPlan App v6.2</span>
-            <p class="text-[9px] text-slate-400 mt-0.5">Interactive Archives & Improved Task Toggles</p>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">WanderPlan App v6.5</span>
+            <p class="text-[9px] text-slate-400 mt-0.5">With Check/Skip Pills & Interactive Soundscapes</p>
         </div>
     </div>
 
@@ -254,7 +252,7 @@
                     <i data-lucide="cloud-lightning" class="w-3.5 h-3.5"></i> Saved
                 </span>
                 <span id="active-route-indicator" class="text-[10px] font-bold bg-pink-50 text-pink-700 border border-pink-100 px-2.5 py-1.5 rounded-xl cute-title select-none hidden sm:inline-block">
-                    iPhone Standalone Optimized 📱
+                    Autoplay Chiptunes Configured 🎵
                 </span>
             </div>
         </div>
@@ -272,17 +270,14 @@
                 <div class="absolute w-1 h-1 bg-white rounded-full top-20 left-1/3 animate-pulse"></div>
                 <div class="absolute w-2 h-2 bg-white rounded-full top-8 left-2/3 animate-[star-twinkle_2.5s_infinite]"></div>
                 <div class="absolute w-1 h-1 bg-white rounded-full top-16 right-48 animate-pulse"></div>
-                <div class="absolute w-1 h-1 bg-white rounded-full top-28 left-1/4 animate-pulse"></div>
                 <div class="absolute w-1.5 h-1.5 bg-yellow-100 rounded-full top-14 right-1/3 animate-[star-twinkle_2s_infinite]"></div>
             </div>
 
             <!-- Celestial Sun/Moon Orb -->
             <div id="sky-celestial" class="absolute w-12 h-12 transition-all duration-700 ease-in-out pointer-events-none z-0" style="bottom: 40px; left: 80%;">
-                <!-- Sun Asset -->
                 <div id="sun-element" class="w-12 h-12 bg-amber-400 rounded-full shadow-[0_0_20px_#f59e0b] flex items-center justify-center transition-all duration-500">
                     <div class="w-10 h-10 bg-amber-300 rounded-full border-2 border-amber-100"></div>
                 </div>
-                <!-- Lunar Crescent -->
                 <svg id="moon-element" class="w-12 h-12 drop-shadow-[0_0_20px_rgba(251,191,36,0.95)] absolute top-0 left-0 hidden transition-all duration-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#fef08a" stroke="#fcd34d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -325,7 +320,7 @@
                         </div>
                         
                         <!-- Toggle Settings Panel Button (Unhide / Hide) -->
-                        <button id="toggle-banner-controls-btn" onclick="toggleBannerControlsDropdown()" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-1.5 px-3 rounded-xl text-xs flex items-center gap-1.5 transition cute-title shadow-3xs" title="Toggle time controls and sync checkboxes">
+                        <button id="toggle-banner-controls-btn" onclick="toggleBannerControlsDropdown()" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-1.5 px-3 rounded-xl text-xs flex items-center gap-1.5 transition cute-title shadow-3xs" title="Toggle time controls, sound volume and weather sliders">
                             <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
                             <span id="banner-controls-btn-text">Unhide</span>
                         </button>
@@ -333,12 +328,17 @@
 
                     <!-- Hidden Dropdown Settings Panel -->
                     <div id="banner-controls-dropdown" class="hidden flex flex-col gap-3 pt-3 border-t border-slate-100/70">
-                        <!-- Volume Control Slider inside dropdown as requested -->
+                        <!-- Volume & Sound Mute Combo inside unhide dropdown (iPhone 15 layout) -->
                         <div class="flex items-center justify-between gap-2 bg-pink-50/50 border border-pink-100 p-2.5 rounded-xl">
-                            <span class="text-[10px] text-pink-800 font-extrabold uppercase tracking-wider">Volume level:</span>
-                            <div class="flex items-center gap-1 bg-white border border-slate-100 px-2 py-1 rounded-xl" title="Volume Control">
-                                <i data-lucide="volume-1" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
-                                <input id="audio-volume-slider" type="range" min="0" max="1" step="0.05" value="0.5" oninput="handleVolumeChange(this.value)" class="w-14 sm:w-16 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                            <span class="text-[10px] text-pink-800 font-extrabold uppercase tracking-wider flex items-center gap-1">
+                                <i data-lucide="music" class="w-3.5 h-3.5"></i> State Ambient:
+                            </span>
+                            <div class="flex items-center gap-2 bg-white border border-slate-100 px-2 py-1 rounded-xl">
+                                <!-- Sound play toggle -->
+                                <button id="btn-global-audio-mute" onclick="toggleGlobalAudioMute()" class="p-1 text-slate-500 hover:text-amber-500 transition" title="Toggle Sound">
+                                    <i id="audio-mute-icon" data-lucide="volume-2" class="w-4 h-4"></i>
+                                </button>
+                                <input id="audio-volume-slider" type="range" min="0" max="1" step="0.05" value="0.5" oninput="handleVolumeChange(this.value)" class="w-14 sm:w-16 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500" title="Adjust Volume">
                             </div>
                         </div>
 
@@ -597,7 +597,7 @@
                         <div class="bg-white p-3 rounded-2xl border border-slate-100 flex items-center gap-3 shadow-3xs">
                             <div class="relative flex-1">
                                 <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
-                                <input type="text" id="itinerary-search" oninput="renderActivePlan()" placeholder="Search activities, locations, notes, or time (e.g. 10:01 PM)..." 
+                                <input type="text" id="itinerary-search" oninput="renderActivePlan()" placeholder="Search activities, locations, notes, or time (e.g. 10:30 AM)..." 
                                     class="w-full pl-10 pr-10 py-2.5 bg-slate-50 focus:bg-white border-2 border-slate-100 focus:border-amber-300 rounded-xl outline-none transition text-xs font-semibold text-slate-700">
                                 <button onclick="clearSearchFilter()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 font-bold text-xs" title="Clear Search">
                                     ✕
@@ -624,7 +624,7 @@
                         </div>
                         <div>
                             <h2 class="cute-title text-2xl font-bold text-slate-800">Companions & Scenic Assets 🎨</h2>
-                            <p class="text-xs text-slate-400 font-semibold">Upload custom backgrounds for weather states, manage buddies, and select mirror flips!</p>
+                            <p class="text-xs text-slate-400 font-semibold">Upload weather backgrounds, customize looping soundtrack files, and mirror flip sprites.</p>
                         </div>
                     </div>
                 </div>
@@ -635,9 +635,8 @@
                         <span>🌅</span> Interactive Scenic Wallpaper Vault (7 Sunny & 7 Rainy Slots)
                     </h3>
                     <p class="text-xs text-slate-500 mb-4 font-semibold">
-                        Customise both states for each time period. Turn the rainy weather on or off individually for each time slot to test wallpapers & companion animations!
+                        Customise both states for each time period. Turn the rainy weather on or off individually for each time slot to test wallpapers!
                     </p>
-
                     <div id="wallpaper-slots-deck-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
 
@@ -692,7 +691,7 @@
                     <div id="character-profiles-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
                 </div>
 
-                <!-- CUSTOMIZER ASSETS PANEL (SUNNY / RAINY) -->
+                <!-- CUSTOMIZER ASSETS PANEL (SUNNY / RAINY / CHIPTUNES) -->
                 <div id="character-gif-editor-block" class="hidden space-y-6 pt-4 border-t border-slate-100">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div>
@@ -702,7 +701,7 @@
                             <p class="text-xs text-slate-400 mt-1 max-w-lg">Configure unique animation layers and looping soundtrack files for active cycles!</p>
                         </div>
                         
-                        <!-- SUNNY/RAINY/MUSIC ASSETS SELECTOR TAB -->
+                        <!-- SUNNY / RAINY / MUSIC ASSETS SELECTOR TAB -->
                         <div class="flex gap-1.5 bg-slate-100 p-1.5 rounded-2xl shrink-0 shadow-3xs border border-slate-200/40">
                             <button id="tab-normal-assets" onclick="switchCustomizerTab('normal')" class="py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1">
                                 <span>☀️</span> Sunny GIFs
@@ -710,11 +709,14 @@
                             <button id="tab-rainy-assets" onclick="switchCustomizerTab('rainy')" class="py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1">
                                 <span>🌧️</span> Rainy GIFs
                             </button>
+                            <button id="tab-music-assets" onclick="switchCustomizerTab('music')" class="py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1">
+                                <span>🎵</span> Music Tracks
+                            </button>
                         </div>
                     </div>
 
                     <p class="text-xs text-slate-400 mt-0.5 bg-amber-50/50 p-3 rounded-xl border border-amber-100/50">
-                        <strong>⚡ Storage Security Vault Active:</strong> Your GIF files are saved locally in a high-capacity database (IndexedDB) so they will never reset or disappear on reload!
+                        <strong>⚡ Storage Security Vault Active:</strong> Your loop soundtracks are stored locally in IndexDB so they persist cleanly across refreshes without resetting!
                     </p>
 
                     <!-- Customizer Selection Grid -->
@@ -739,7 +741,7 @@
                     </div>
                     <div>
                         <h2 class="cute-title text-2xl font-bold text-slate-800">Archived Travel Journals</h2>
-                        <p class="text-xs text-slate-400 font-semibold">Your finished journeys are stored safely here. Tap on any trip to see full day breakdown, costs and status logs!</p>
+                        <p class="text-xs text-slate-400 font-semibold">Past travel itineraries. Click any card below to expand and view full timeline, spent prices, and completed checkoff logs!</p>
                     </div>
                 </div>
 
@@ -814,7 +816,7 @@
     </main>
 
     <!-- WARNING DIALOG POPUP MODAL -->
-    <div id="warning-modal" class="hidden fixed inset-0 z-50 overflow-y-auto animate-fade-in" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div id="warning-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" aria-hidden="true" onclick="closeWarningModal()"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -838,18 +840,54 @@
         </div>
     </div>
 
+    <!-- ARCHIVED DETAIL MODAL VIEW (New Interactive Feature) -->
+    <div id="archived-detail-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center">
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" onclick="closeArchivedDetailModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full p-6 border-2 border-indigo-400">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span id="archived-modal-theme-emoji" class="text-2xl">🏖️</span>
+                        <div>
+                            <h3 id="archived-modal-title" class="cute-title text-xl font-bold text-slate-900">Kyoto Trip details</h3>
+                            <p id="archived-modal-date" class="text-[10px] text-slate-400 font-bold tracking-wide uppercase"></p>
+                        </div>
+                    </div>
+                    <button onclick="closeArchivedDetailModal()" class="p-1.5 hover:bg-slate-100 rounded-xl transition text-slate-400 hover:text-slate-700">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <div id="archived-modal-content-area" class="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <div class="mt-6 flex justify-between items-center border-t border-slate-100 pt-4">
+                    <div class="text-left">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Final Spent Cost Summary</span>
+                        <p class="text-lg font-black text-emerald-600 cute-title"><span id="archived-modal-currency-box">$</span><span id="archived-modal-spent-sum">0.00</span></p>
+                    </div>
+                    <button onclick="closeArchivedDetailModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition cute-title shadow-xs">
+                        Dismiss
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- IOS EXPORT FALLBACK MODAL -->
-    <div id="ios-export-modal" class="hidden fixed inset-0 z-50 overflow-y-auto animate-fade-in" role="dialog" aria-modal="true">
+    <div id="ios-export-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center">
             <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" onclick="closeIosExportModal()"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
             <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full p-6 border-4 border-amber-400">
                 <div class="text-center mb-4">
-                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 text-amber-600 mb-2 animate-bounce">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 text-amber-600 mb-2">
                         <i data-lucide="smartphone" class="w-6 h-6 text-amber-600"></i>
                     </div>
                     <h3 class="cute-title text-xl font-bold text-slate-900">iPhone Backup Vault 📱</h3>
-                    <p class="text-xs text-slate-500 mt-1">iOS Safari sometimes blocks direct file downloads. If your file didn't download automatically, use our secure copy tool below!</p>
+                    <p class="text-xs text-slate-500 mt-1">iOS Safari sometimes blocks direct file downloads. Copy your raw JSON backup code below!</p>
                 </div>
                 
                 <div class="space-y-4">
@@ -858,7 +896,7 @@
                         <textarea id="ios-backup-textarea" readonly class="w-full h-32 p-3 bg-slate-50 border-2 border-slate-100 rounded-xl font-mono text-[10px] text-slate-600 focus:outline-none select-all" onclick="this.select()"></textarea>
                     </div>
                     <div class="bg-amber-50/70 border border-amber-100 p-3 rounded-xl text-[11px] text-amber-900 font-semibold">
-                        💡 <strong>Quick Tip:</strong> Tap "Copy Backup Text", then open your iPhone's <strong>Notes app</strong> and paste it there! To restore, simply copy it back from Notes and use the "Import JSON Backup" button.
+                        💡 <strong>Quick Tip:</strong> Tap "Copy Backup Text", then open your iPhone's <strong>Notes app</strong> and paste it there!
                     </div>
                 </div>
                 <div class="mt-6 flex flex-col sm:flex-row justify-end gap-2">
@@ -1142,11 +1180,9 @@
         let switchSourceDayIndex = null;
         let switchSourceRowIndex = null;
 
-        // Expanded Archive plan index tracking
-        let expandedArchivePlanId = null;
-
         // Custom companion audio system controllers
         let masterAudioLoopPlayer = new Audio();
+        masterAudioLoopPlayer.loop = true;
         let activeAudioStateString = null;
         let isGlobalAudioUnmuted = true; // Enabled by default to support autoplay
         let globalVolumeLevel = 0.5; // Default volume level
@@ -1176,7 +1212,7 @@
             night: false
         };
 
-        let customizerTab = 'normal'; // 'normal' | 'rainy'
+        let customizerTab = 'normal'; // 'normal' | 'rainy' | 'music'
 
         // Global cache of uploaded backgrounds
         let uploadedBackgrounds = {
@@ -1252,6 +1288,23 @@
             night: { label: "Night", hours: "10:00 PM - 4:29 AM", icon: "🌃", defaultGrad: "linear-gradient(to bottom, #030712, #0f172a, #1e293b)", fallbackRainy: "linear-gradient(to bottom, #030712, #0b0f19, #111827)" }
         };
 
+        function toggleGlobalAudioMute() {
+            isGlobalAudioUnmuted = !isGlobalAudioUnmuted;
+            const icon = document.getElementById('audio-mute-icon');
+            if (isGlobalAudioUnmuted) {
+                icon.setAttribute('data-lucide', 'volume-2');
+                masterAudioLoopPlayer.muted = false;
+                if (activeAudioStateString) {
+                    masterAudioLoopPlayer.play().catch(e => console.debug("Autoplay blocked. Tap anywhere to start soundtrack."));
+                }
+            } else {
+                icon.setAttribute('data-lucide', 'volume-x');
+                masterAudioLoopPlayer.muted = true;
+                masterAudioLoopPlayer.pause();
+            }
+            lucide.createIcons();
+        }
+
         function toggleBannerControlsDropdown() {
             const dropdown = document.getElementById('banner-controls-dropdown');
             const btnText = document.getElementById('banner-controls-btn-text');
@@ -1267,7 +1320,6 @@
             }
         }
 
-        // Updated completed check supporting status checks
         function isPlanFullyCompleted(plan) {
             if (!plan.days || plan.days.length === 0) return false;
             let totalRows = 0;
@@ -1433,7 +1485,8 @@
                         sleepingRainy: null, sleepingRainyFlipped: false,
                         transitRainy: null, transitRainyFlipped: false,
                         homeboundRainy: null, homeboundRainyFlipped: false,
-                        preparingRainy: null, preparingRainyFlipped: false
+                        preparingRainy: null, preparingRainyFlipped: false,
+                        wavingMusic: null, walkingMusic: null, sleepingMusic: null, transitMusic: null, homeboundMusic: null, preparingMusic: null
                     };
                     characterProfiles.push(defaultBuddy);
                     await saveProfileToIDB(databaseConnection, defaultBuddy);
@@ -1478,7 +1531,6 @@
             renderWallpaperSlotsDeck();
             renderBackgroundPreviews();
 
-            // Handle strict browser autoplay policies via a global user-interaction listener
             const resumeAudioOnFirstInteraction = () => {
                 if (isGlobalAudioUnmuted && masterAudioLoopPlayer.paused && activeAudioStateString) {
                     masterAudioLoopPlayer.play().catch(err => console.debug("Interaction autoplay triggered safely: ", err));
@@ -1688,6 +1740,47 @@
                 volSlider.value = globalVolumeLevel;
             }
             masterAudioLoopPlayer.volume = globalVolumeLevel;
+        }
+
+        function playStateAudioLoop(soundStateKey) {
+            if (!isGlobalAudioUnmuted) {
+                masterAudioLoopPlayer.pause();
+                activeAudioStateString = soundStateKey;
+                return;
+            }
+
+            const activeCompanions = characterProfiles.filter(c => activeCharacterIds.includes(c.id));
+            if (activeCompanions.length === 0) {
+                masterAudioLoopPlayer.pause();
+                activeAudioStateString = null;
+                return;
+            }
+
+            const leadChar = activeCompanions[0]; 
+            const stateMusicField = soundStateKey + 'Music'; 
+            const base64Audio = leadChar[stateMusicField];
+
+            if (!base64Audio) {
+                masterAudioLoopPlayer.pause();
+                activeAudioStateString = null;
+                return;
+            }
+
+            if (activeAudioStateString === soundStateKey && !masterAudioLoopPlayer.paused) {
+                return; 
+            }
+
+            activeAudioStateString = soundStateKey;
+            
+            try {
+                masterAudioLoopPlayer.src = base64Audio;
+                masterAudioLoopPlayer.volume = globalVolumeLevel;
+                masterAudioLoopPlayer.play().catch(e => {
+                    console.debug("Browser blocked autoplay. Audio will play on first interaction.");
+                });
+            } catch (err) {
+                console.error("Error setting custom state audio source", err);
+            }
         }
 
         function timeStringToMinutes(timeStr) {
@@ -2009,6 +2102,8 @@
                 }
             }
 
+            playStateAudioLoop(currentScenicState);
+
             renderActiveCompanionsInBanner(currentScenicState, isCurrentRainy);
             updateScenicBannerSpeech(hasActiveTaskRightNow, activeTaskStyle, isPlanActiveNow, activeTaskRow, currentScenicState);
         }
@@ -2093,7 +2188,6 @@
                 if (scenicState === 'sleeping') {
                     zzzMarkup = `
                         <div class="absolute -left-3 -top-6 text-amber-400 font-extrabold text-[10px] pointer-events-none select-none anim-zz-1">zZZ</div>
-                        <div class="absolute -right-3 -top-3 text-amber-400 font-extrabold text-xs pointer-events-none select-none anim-zz-2">zZZ</div>
                     `;
                 }
 
@@ -2136,7 +2230,6 @@
             return null;
         }
 
-        // Updated speech bubble handler with waiting animation future-prioritisation logic
         function updateScenicBannerSpeech(hasActiveTaskRightNow, activeTaskStyle, isPlanActiveNow, activeTaskRow, currentScenicState) {
             const speechTextEl = document.getElementById('scenic-speech-bubble-text');
             const statusTitle = document.getElementById('scenic-status-title');
@@ -2146,7 +2239,6 @@
             const activeCompanions = characterProfiles.filter(c => activeCharacterIds.includes(c.id));
             const namesStr = activeCompanions.length > 0 ? activeCompanions.map(c => escapeHTML(c.name)).join(' & ') : "Companions";
 
-            // If we are in waiting state, prioritize next chronologically unarchived plan
             const nextFuturePlan = itineraries
                 .filter(p => !p.archived && p.id !== activePlanId)
                 .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
@@ -2181,7 +2273,6 @@
                     statusDesc.innerText = `Next stop: ${escapeHTML(activeTaskRow.place)}`;
                 }
             } else {
-                // Future speech bubble prioritizing upcoming plan when waiting
                 if (nextFuturePlan && (currentScenicState === 'waving' || currentScenicState === 'preparing')) {
                     speechTextEl.innerText = `We are so Excited to visit ${escapeHTML(nextFuturePlan.place)} on ${formatDate(nextFuturePlan.date)}! See you there! ✨`;
                     statusTitle.innerText = "Looking Forward";
@@ -2239,13 +2330,18 @@
             customizerTab = tab;
             const btnNormal = document.getElementById('tab-normal-assets');
             const btnRainy = document.getElementById('tab-rainy-assets');
+            const btnMusic = document.getElementById('tab-music-assets');
             
+            btnNormal.className = "py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1 text-slate-500 hover:text-slate-800";
+            btnRainy.className = "py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1 text-slate-500 hover:text-slate-800";
+            btnMusic.className = "py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1 text-slate-500 hover:text-slate-800";
+
             if (tab === 'normal') {
                 btnNormal.className = "py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1 bg-white text-slate-800 shadow-3xs border border-amber-200";
-                btnRainy.className = "py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1 text-slate-500 hover:text-slate-800";
             } else if (tab === 'rainy') {
-                btnNormal.className = "py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1 text-slate-500 hover:text-slate-800";
                 btnRainy.className = "py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1 bg-blue-600 text-white shadow-3xs";
+            } else if (tab === 'music') {
+                btnMusic.className = "py-2 px-3.5 rounded-xl font-bold text-xs cute-title transition duration-150 flex items-center gap-1 bg-emerald-600 text-white shadow-3xs";
             }
 
             renderCharacterProfiles();
@@ -2278,6 +2374,11 @@
                     if (char[st]) uploadCount++;
                 });
 
+                let musicCount = 0;
+                ['wavingMusic', 'walkingMusic', 'sleepingMusic', 'transitMusic', 'homeboundMusic', 'preparingMusic'].forEach(m => {
+                    if (char[m]) musicCount++;
+                });
+
                 const card = document.createElement('div');
                 card.className = `p-4 rounded-xl border flex flex-col justify-between transition ${
                     isActive 
@@ -2289,9 +2390,12 @@
                     <div>
                         <div class="flex items-center justify-between mb-1 min-w-0">
                             <h4 class="cute-title text-sm font-extrabold text-slate-800 truncate">${escapeHTML(char.name)}</h4>
-                            <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-bold">${uploadCount}/12 GIFs</span>
+                            <div class="flex flex-col text-right">
+                                <span class="text-[8px] bg-slate-100 text-slate-600 px-1 py-0.5 rounded font-bold">${uploadCount}/12 GIFs</span>
+                                <span class="text-[8px] bg-emerald-50 text-emerald-700 px-1 py-0.5 rounded font-bold mt-0.5">${musicCount}/6 Tracks</span>
+                            </div>
                         </div>
-                        <p class="text-[10px] text-slate-400 font-semibold mb-3">Custom transparent animation GIFs and weather settings saved.</p>
+                        <p class="text-[10px] text-slate-400 font-semibold mb-3">Custom transparent animations & soundtracks stored safely.</p>
                     </div>
                     <div class="flex gap-1.5 flex-wrap">
                         <button onclick="handleToggleCompanionActive('${char.id}')" class="flex-1 font-bold text-[10px] py-2 px-3 rounded-xl transition uppercase tracking-wider cute-title ${
@@ -2361,7 +2465,8 @@
                 sleepingRainy: null, sleepingRainyFlipped: false,
                 transitRainy: null, transitRainyFlipped: false,
                 homeboundRainy: null, homeboundRainyFlipped: false,
-                preparingRainy: null, preparingRainyFlipped: false
+                preparingRainy: null, preparingRainyFlipped: false,
+                wavingMusic: null, walkingMusic: null, sleepingMusic: null, transitMusic: null, homeboundMusic: null, preparingMusic: null
             };
 
             characterProfiles.push(newChar);
@@ -2460,53 +2565,92 @@
             ];
 
             states.forEach(state => {
-                const keys = getActiveStateKeys(state.key);
-                const asset = profile[keys.asset];
-                const isFlipped = !!profile[keys.flip];
-                const flipStyle = isFlipped ? 'transform: scaleX(-1);' : '';
-
                 const card = document.createElement('div');
-                card.className = "bg-slate-50 border border-slate-100 p-5 rounded-2xl flex flex-col justify-between";
+                card.className = "bg-slate-50 border border-slate-100 p-5 rounded-2xl flex flex-col justify-between shadow-3xs";
 
-                let badgeColor = "text-amber-600";
-                if (state.key === 'walking') badgeColor = "text-indigo-600";
-                else if (state.key === 'sleeping') badgeColor = "text-purple-600";
-                else if (state.key === 'transit') badgeColor = "text-blue-600";
-                else if (state.key === 'homebound') badgeColor = "text-teal-600";
-                else if (state.key === 'preparing') badgeColor = "text-rose-600";
+                let badgeColor = "text-amber-600 bg-amber-50 border-amber-100";
+                if (state.key === 'walking') badgeColor = "text-indigo-600 bg-indigo-50 border-indigo-100";
+                else if (state.key === 'sleeping') badgeColor = "text-purple-600 bg-purple-50 border-purple-100";
+                else if (state.key === 'transit') badgeColor = "text-blue-600 bg-blue-50 border-blue-100";
+                else if (state.key === 'homebound') badgeColor = "text-teal-600 bg-teal-50 border-teal-100";
+                else if (state.key === 'preparing') badgeColor = "text-rose-600 bg-rose-50 border-rose-100";
 
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold ${badgeColor} tracking-wider uppercase">${state.label} ${customizerTab === 'rainy' ? '[RAINY]' : ''}</span>
-                            <span class="text-xl">${state.icon}</span>
-                        </div>
-                        <h3 class="cute-title text-base font-bold text-slate-700">${state.label} ${customizerTab === 'rainy' ? '🌧️' : '☀️'}</h3>
-                        <p class="text-slate-400 text-xs mt-1 mb-4">${state.desc}. Supports transparent gifs or pictures.</p>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="w-full h-32 bg-white rounded-xl border border-slate-200/60 flex items-center justify-center overflow-hidden">
-                            ${asset ? `
-                                <img src="${asset}" style="${flipStyle}" class="max-h-full max-w-full object-contain rounded-xl p-1 shadow-xs" alt="Preview">
-                            ` : `
-                                <span class="text-xs text-slate-300 font-semibold">No custom GIF</span>
-                            `}
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <div class="flex gap-2">
-                                <label class="flex-1 text-center bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-2 px-3 rounded-xl cursor-pointer text-xs transition cute-title flex items-center justify-center gap-1.5 shadow-3xs">
-                                    <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-                                    <span>Upload GIF</span>
-                                    <input type="file" accept="image/gif, image/png, image/jpeg" class="hidden" onchange="handleCharacterUpload(event, '${state.key}')">
-                                </label>
-                                <button onclick="resetCharacterState('${state.key}')" class="bg-slate-200 hover:bg-slate-300 text-slate-600 px-3 py-2 rounded-xl text-xs transition font-semibold">Reset</button>
+                if (customizerTab === 'music') {
+                    // MUSIC TAB LAYOUT
+                    const musicFileKey = state.key + 'Music';
+                    const base64Audio = profile[musicFileKey];
+
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[9px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${badgeColor}">${state.label} Audio</span>
+                                <span class="text-xl">🎵</span>
                             </div>
-                            <button onclick="toggleStateFlip('${state.key}')" class="w-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold py-1.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-1.5 shadow-3xs cute-title">
-                                🔄 <span>${isFlipped ? "Flipped (Mirror)" : "Facing Left"}</span>
-                            </button>
+                            <h3 class="cute-title text-base font-bold text-slate-700">${state.label} Soundtrack</h3>
+                            <p class="text-slate-400 text-xs mt-1 mb-4">Plays ambient background loops when the companion enters this state.</p>
                         </div>
-                    </div>
-                `;
+                        <div class="space-y-3">
+                            <div class="w-full py-4 bg-white rounded-xl border border-slate-200/60 flex flex-col items-center justify-center px-4">
+                                ${base64Audio ? `
+                                    <span class="text-[10px] text-emerald-600 font-extrabold flex items-center gap-1 mb-2">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> Soundtrack Loaded!
+                                    </span>
+                                    <audio controls class="w-full h-8 outline-none" src="${base64Audio}" style="max-height: 32px;"></audio>
+                                ` : `
+                                    <span class="text-[10px] text-slate-400 font-semibold mb-2">No custom ambient loop</span>
+                                `}
+                            </div>
+                            <div class="flex gap-2">
+                                <label class="flex-1 text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-3 rounded-xl cursor-pointer text-xs transition cute-title flex items-center justify-center gap-1.5 shadow-3xs">
+                                    <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                                    <span>Upload MP3</span>
+                                    <input type="file" accept="audio/mpeg, audio/mp3, audio/wav" class="hidden" onchange="handleMusicUpload(event, '${state.key}')">
+                                </label>
+                                <button onclick="resetCharacterMusic('${state.key}')" class="bg-slate-200 hover:bg-slate-300 text-slate-600 px-3 py-2 rounded-xl text-xs transition font-semibold">Reset</button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // SUNNY & RAINY GRAPHIC CHANNELS
+                    const keys = getActiveStateKeys(state.key);
+                    const asset = profile[keys.asset];
+                    const isFlipped = !!profile[keys.flip];
+                    const flipStyle = isFlipped ? 'transform: scaleX(-1);' : '';
+
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[9px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${badgeColor}">${state.label} ${customizerTab === 'rainy' ? 'Stormy' : 'Sunny'}</span>
+                                <span class="text-xl">${state.icon}</span>
+                            </div>
+                            <h3 class="cute-title text-base font-bold text-slate-700">${state.label} ${customizerTab === 'rainy' ? '🌧️' : '☀️'}</h3>
+                            <p class="text-slate-400 text-xs mt-1 mb-4">${state.desc}. Transparent GIF files are highly recommended.</p>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="w-full h-32 bg-white rounded-xl border border-slate-200/60 flex items-center justify-center overflow-hidden">
+                                ${asset ? `
+                                    <img src="${asset}" style="${flipStyle}" class="max-h-full max-w-full object-contain rounded-xl p-1 shadow-xs" alt="Preview">
+                                ` : `
+                                    <span class="text-xs text-slate-300 font-semibold">No custom GIF loaded</span>
+                                `}
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <div class="flex gap-2">
+                                    <label class="flex-1 text-center bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-2 px-3 rounded-xl cursor-pointer text-xs transition cute-title flex items-center justify-center gap-1.5 shadow-3xs">
+                                        <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                                        <span>Upload GIF</span>
+                                        <input type="file" accept="image/gif, image/png, image/jpeg" class="hidden" onchange="handleCharacterUpload(event, '${state.key}')">
+                                    </label>
+                                    <button onclick="resetCharacterState('${state.key}')" class="bg-slate-200 hover:bg-slate-300 text-slate-600 px-3 py-2 rounded-xl text-xs transition font-semibold">Reset</button>
+                                </div>
+                                <button onclick="toggleStateFlip('${state.key}')" class="w-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold py-1.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-1.5 shadow-3xs cute-title">
+                                    🔄 <span>${isFlipped ? "Flipped (Mirror)" : "Facing Left"}</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 gridContainer.appendChild(card);
             });
             lucide.createIcons();
@@ -2543,6 +2687,57 @@
                 renderCharacterProfiles();
             };
             reader.readAsDataURL(file);
+        }
+
+        function handleMusicUpload(event, stateKey) {
+            const activeProfile = characterProfiles.find(c => c.id === selectedCharacterId);
+            if (!activeProfile) return;
+
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 8 * 1024 * 1024) {
+                openWarningModal(
+                    "Sound file too large! ⚠️",
+                    "Please upload a chiptune or MP3 clip under 8MB to preserve device databases.",
+                    () => {}
+                );
+                document.getElementById('modal-confirm-btn').innerText = "Understood";
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const musicField = stateKey + 'Music';
+                activeProfile[musicField] = e.target.result;
+                try {
+                    if (databaseConnection) {
+                        await saveProfileToIDB(databaseConnection, activeProfile);
+                    }
+                } catch (err) {
+                    console.error("IndexedDB failed to write loop music", err);
+                }
+                renderCharacterProfiles();
+                updateSkyScenery(); 
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function resetCharacterMusic(stateKey) {
+            const activeProfile = characterProfiles.find(c => c.id === selectedCharacterId);
+            if (!activeProfile) return;
+
+            const musicField = stateKey + 'Music';
+            activeProfile[musicField] = null;
+            try {
+                if (databaseConnection) {
+                    await saveProfileToIDB(databaseConnection, activeProfile);
+                }
+            } catch (err) {
+                console.error("IndexedDB failed to clear soundtrack", err);
+            }
+            renderCharacterProfiles();
+            updateSkyScenery();
         }
 
         async function resetCharacterState(stateKey) {
@@ -2703,11 +2898,6 @@
             updateSkyScenery();
         }
 
-        function toggleArchiveCardExpansion(planId) {
-            expandedArchivePlanId = (expandedArchivePlanId === planId) ? null : planId;
-            renderArchivePage();
-        }
-
         function renderArchivePage() {
             const container = document.getElementById('archived-plans-page-list');
             if (!container) return;
@@ -2731,121 +2921,33 @@
                 const theme = THEMES[plan.theme] || THEMES.beach;
                 const totalDays = plan.days ? plan.days.length : 0;
                 const dateSummary = getItineraryDateSummary(plan);
-                const isExpanded = plan.id === expandedArchivePlanId;
-
-                // Sum up budgeted vs spent costs for this archived trip
-                let estCostSum = 0;
-                let actCostSum = 0;
-                if (plan.days) {
-                    plan.days.forEach(day => {
-                        if (day.rows) {
-                            day.rows.forEach(row => {
-                                if (row.status !== 'skipped') {
-                                    estCostSum += parseFloat(row.cost) || 0;
-                                }
-                                if (row.status === 'completed' || row.completed) {
-                                    actCostSum += parseFloat(row.actualCost || row.cost || 0) || 0;
-                                }
-                            });
-                        }
-                    });
-                }
-
-                // Render the expanded schedule detail if expanded
-                let archiveDetailList = '';
-                if (isExpanded) {
-                    archiveDetailList = `
-                        <div class="mt-4 pt-4 border-t border-slate-100 space-y-4 text-left max-h-[320px] overflow-y-auto pr-1">
-                            <div class="flex justify-between items-center bg-slate-50 border border-slate-100 p-2.5 rounded-xl text-[10px] font-bold text-slate-600">
-                                <span>Est. Budget: ${plan.currency}${estCostSum.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}</span>
-                                <span class="text-emerald-700">Actual Spent: ${plan.currency}${actCostSum.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})}</span>
-                            </div>
-                            
-                            ${plan.days.map((day, dIdx) => `
-                                <div class="space-y-1.5">
-                                    <h5 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full ${theme.lineColor}"></span>
-                                        <span>${escapeHTML(day.title)}</span>
-                                    </h5>
-                                    
-                                    <div class="space-y-1 pl-4 border-l-2 border-dashed border-slate-100">
-                                        ${day.rows.length === 0 ? `
-                                            <p class="text-[10px] text-slate-400 italic font-medium">No schedule items listed.</p>
-                                        ` : day.rows.map(row => {
-                                            const isCompletedRow = row.status === 'completed' || row.completed;
-                                            const isSkippedRow = row.status === 'skipped';
-                                            
-                                            let statusBadge = `<span class="text-[9px] font-bold bg-slate-100 text-slate-500 border border-slate-150 px-1.5 py-0.5 rounded-lg select-none">Pending</span>`;
-                                            if (isCompletedRow) {
-                                                statusBadge = `<span class="text-[9px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 px-1.5 py-0.5 rounded-lg select-none">Completed ✓</span>`;
-                                            } else if (isSkippedRow) {
-                                                statusBadge = `<span class="text-[9px] font-bold bg-rose-100 text-rose-800 border border-rose-200 px-1.5 py-0.5 rounded-lg select-none italic">Skipped ✕</span>`;
-                                            }
-
-                                            const rowTitle = row.activityType === 'transit'
-                                                ? `🚘 Transit: ${escapeHTML(row.transitFrom)} ➔ ${escapeHTML(row.transitTo)}`
-                                                : row.activityType === 'homebound'
-                                                    ? `🏡 Homebound: ${escapeHTML(row.transitFrom)} ➔ ${escapeHTML(row.transitTo)}`
-                                                    : escapeHTML(row.place);
-
-                                            return `
-                                                <div class="py-1.5 border-b border-slate-50 flex items-center justify-between gap-3 text-[11px]">
-                                                    <div class="min-w-0 flex-1">
-                                                        <div class="flex items-center gap-1.5 flex-wrap">
-                                                            <span class="text-[9px] font-extrabold uppercase bg-slate-100 text-slate-600 px-1 rounded">${row.time ? formatTime12Hour(row.time) : 'Flexible'}</span>
-                                                            <span class="font-bold text-slate-700 truncate max-w-[140px] sm:max-w-[200px] ${isCompletedRow || isSkippedRow ? 'line-through text-slate-400' : ''}">${rowTitle}</span>
-                                                        </div>
-                                                        ${row.cost > 0 ? `
-                                                            <span class="text-[9px] text-slate-400 font-semibold block mt-0.5">
-                                                                Est: ${plan.currency}${parseFloat(row.cost).toFixed(2)} 
-                                                                ${isCompletedRow && row.actualCost ? `| Spent: <span class="font-extrabold text-emerald-600">${plan.currency}${parseFloat(row.actualCost).toFixed(2)}</span>` : ''}
-                                                            </span>
-                                                        ` : ''}
-                                                    </div>
-                                                    <div class="shrink-0">
-                                                        ${statusBadge}
-                                                    </div>
-                                                </div>
-                                            `;
-                                        }).join('')}
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                }
 
                 const card = document.createElement('div');
-                card.className = `bg-white p-5 rounded-2xl border transition duration-200 relative overflow-hidden flex flex-col justify-between ${
-                    isExpanded ? 'border-indigo-300 ring-2 ring-indigo-50 shadow-md md:col-span-2 lg:col-span-3' : 'border-slate-100 shadow-3xs hover:shadow-xs'
-                }`;
+                card.className = "bg-white p-5 rounded-2xl border border-slate-100 shadow-3xs hover:shadow-sm cursor-pointer transition duration-200 relative overflow-hidden flex flex-col justify-between";
                 
+                card.setAttribute("onclick", `triggerArchivedDetailModal('${plan.id}')`);
+
                 card.innerHTML = `
                     <div class="absolute left-0 top-0 bottom-0 w-2 ${theme.lineColor}"></div>
-                    <div class="pl-2 cursor-pointer select-none" onclick="toggleArchiveCardExpansion('${plan.id}')">
-                        <div class="flex items-center justify-between gap-1.5">
-                            <div class="flex items-center gap-2.5 min-w-0">
-                                <span class="text-2xl shrink-0">${theme.emoji}</span>
-                                <div class="min-w-0">
-                                    <h4 class="font-bold text-slate-800 text-base cute-title truncate">${escapeHTML(plan.place)}</h4>
-                                    <p class="text-xs text-slate-400 font-semibold mt-0.5 flex items-center gap-1">
-                                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i> ${dateSummary}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="flex flex-col items-end gap-1.5 shrink-0">
-                                <span class="text-[10px] font-bold ${theme.badgeBg} ${theme.badgeColor} px-2 py-0.5 rounded-lg cute-title">
-                                    ${totalDays} Days Planned
-                                </span>
-                                <span class="text-[9px] font-bold text-slate-400 hover:text-indigo-500 transition flex items-center gap-0.5">
-                                    ${isExpanded ? 'Hide Details ▲' : 'Show Details ▼'}
-                                </span>
-                            </div>
+                    <div class="pl-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">${theme.emoji}</span>
+                            <h4 class="font-bold text-slate-800 text-base cute-title truncate">${escapeHTML(plan.place)}</h4>
                         </div>
-                        ${archiveDetailList}
+                        <p class="text-xs text-slate-400 font-semibold mt-1.5 flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${dateSummary}
+                        </p>
+                        <div class="flex gap-2 items-center mt-3 flex-wrap">
+                            <span class="text-[10px] font-bold ${theme.badgeBg} ${theme.badgeColor} px-2 py-0.5 rounded-lg cute-title">
+                                ${totalDays} Days Planned
+                            </span>
+                            <span class="text-[10px] bg-slate-50 text-slate-500 px-2 py-0.5 rounded-lg border font-semibold">
+                                Click to View Itinerary 🔍
+                            </span>
+                        </div>
                     </div>
 
-                    <div class="mt-4 pt-4 border-t border-slate-50 flex items-center justify-end gap-1.5">
+                    <div class="mt-4 pt-4 border-t border-slate-50 flex items-center justify-end gap-1.5" onclick="event.stopPropagation()">
                         <button onclick="restoreFromArchiveDirectly('${plan.id}')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 font-bold px-3 py-1.5 rounded-xl transition text-xs flex items-center gap-1 cute-title">
                             <i data-lucide="archive-restore" class="w-3.5 h-3.5"></i> Restore
                         </button>
@@ -2858,6 +2960,98 @@
             });
 
             lucide.createIcons();
+        }
+
+        function triggerArchivedDetailModal(planId) {
+            const plan = itineraries.find(p => p.id === planId);
+            if (!plan) return;
+
+            const theme = THEMES[plan.theme] || THEMES.beach;
+            const currencySymbol = plan.currency || '$';
+
+            document.getElementById('archived-modal-theme-emoji').innerText = theme.emoji;
+            document.getElementById('archived-modal-title').innerText = plan.place;
+            document.getElementById('archived-modal-date').innerText = getItineraryDateSummary(plan);
+            document.getElementById('archived-modal-currency-box').innerText = currencySymbol;
+
+            const contentArea = document.getElementById('archived-modal-content-area');
+            contentArea.innerHTML = '';
+
+            let overallActualSpentSum = 0;
+
+            if (!plan.days || plan.days.length === 0) {
+                contentArea.innerHTML = `
+                    <p class="text-xs text-slate-400 italic text-center py-6">This archived trip didn't have any days listed.</p>
+                `;
+            } else {
+                plan.days.forEach((day, dIdx) => {
+                    const daySection = document.createElement('div');
+                    daySection.className = "bg-slate-50 p-3.5 rounded-2xl border border-slate-100";
+                    
+                    let rowsHtml = '';
+                    if (!day.rows || day.rows.length === 0) {
+                        rowsHtml = `<p class="text-[10px] text-slate-400 italic mt-1">No tasks listed for this day.</p>`;
+                    } else {
+                        day.rows.forEach(r => {
+                            const isCompleted = r.status === 'completed' || r.completed;
+                            const isSkipped = r.status === 'skipped';
+                            
+                            let pillStyle = "bg-slate-100 text-slate-600 border border-slate-200";
+                            let statusText = "Pending";
+                            let priceInfo = '';
+
+                            if (isCompleted) {
+                                pillStyle = "bg-emerald-100 text-emerald-800 border border-emerald-200";
+                                statusText = "Completed ✓";
+                                const actualPrice = parseFloat(r.actualCost) || 0;
+                                overallActualSpentSum += actualPrice;
+                                priceInfo = `Spent: ${currencySymbol}${actualPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                            } else if (isSkipped) {
+                                pillStyle = "bg-rose-100 text-rose-800 border border-rose-200";
+                                statusText = "Skipped ✕";
+                                priceInfo = `<span class="line-through text-slate-400">Est: ${currencySymbol}${parseFloat(r.cost || 0).toFixed(2)}</span> (Cost Ignored)`;
+                            } else {
+                                priceInfo = `Est: ${currencySymbol}${parseFloat(r.cost || 0).toFixed(2)}`;
+                            }
+
+                            const cleanName = r.activityType === 'transit' 
+                                ? `🚘 Transit: ${r.transitFrom} ➜ ${r.transitTo}`
+                                : r.activityType === 'homebound'
+                                    ? `🏡 Heading Home: ${r.transitFrom} ➜ ${r.transitTo}`
+                                    : r.place;
+
+                            rowsHtml += `
+                                <div class="flex items-start justify-between gap-3 text-xs mt-2.5 pb-2 border-b border-slate-200/50 last:border-0 last:pb-0">
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                            <span class="text-[9px] bg-slate-200 text-slate-700 px-1 py-0.5 rounded font-bold">${r.time ? formatTime12Hour(r.time) : 'Flexible'}</span>
+                                            <p class="font-bold text-slate-800 truncate">${escapeHTML(cleanName)}</p>
+                                        </div>
+                                        ${r.notes ? `<p class="text-[10px] text-slate-400 mt-0.5">Notes: ${escapeHTML(r.notes)}</p>` : ''}
+                                    </div>
+                                    <div class="text-right shrink-0">
+                                        <span class="text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded ${pillStyle}">${statusText}</span>
+                                        <p class="text-[10px] font-semibold text-slate-500 mt-1">${priceInfo}</p>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+
+                    daySection.innerHTML = `
+                        <h5 class="cute-title text-xs font-extrabold text-slate-700 tracking-wider">${escapeHTML(day.title)}</h5>
+                        <div class="divide-y divide-slate-100/60">${rowsHtml}</div>
+                    `;
+                    contentArea.appendChild(daySection);
+                });
+            }
+
+            document.getElementById('archived-modal-spent-sum').innerText = overallActualSpentSum.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('archived-detail-modal').classList.remove('hidden');
+        }
+
+        function closeArchivedDetailModal() {
+            document.getElementById('archived-detail-modal').classList.add('hidden');
         }
 
         function restoreFromArchiveDirectly(planId) {
@@ -3071,7 +3265,6 @@
             }
         }
 
-        // Updated rendering engine for active plans supporting Check | X Mark | Switch
         function renderActivePlan() {
             const noPlanView = document.getElementById('no-plan-selected-view');
             const activeView = document.getElementById('active-plan-view');
@@ -3089,7 +3282,6 @@
 
             const theme = THEMES[activePlan.theme] || THEMES.beach;
 
-            // Updated cost checks taking 'skipped' state into account
             let estimatedTotal = 0;
             let actualSpentTotal = 0;
             activePlan.days.forEach(d => {
@@ -3265,29 +3457,31 @@
                             const isSkippedRow = row.status === 'skipped';
 
                             return `
-                                <div class="p-4 sm:px-6 hover:bg-slate-50/40 transition duration-150 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${isCompletedRow ? 'bg-emerald-50/20' : ''} ${isSkippedRow ? 'bg-rose-50/10 opacity-70' : ''}">
+                                <div class="p-4 sm:px-6 hover:bg-slate-50/40 transition duration-150 flex flex-col md:flex-row md:items-center justify-between gap-4 ${isCompletedRow ? 'bg-emerald-50/20' : ''} ${isSkippedRow ? 'bg-rose-50/10 opacity-70' : ''}">
                                     
-                                    <div class="flex items-start gap-4 flex-1 min-w-0">
-                                        <!-- Done / Skip Descriptive Pills -->
-                                        <div class="flex flex-row sm:flex-col gap-1.5 shrink-0 mt-1">
-                                            <!-- Done/Complete Button -->
+                                    <div class="flex items-start gap-3 flex-1 min-w-0">
+                                        <!-- Descriptive Check & Skip Buttons (New Request Option) -->
+                                        <div class="flex flex-row md:flex-col gap-1.5 shrink-0 mt-1">
+                                            <!-- Green labeled Check Button -->
                                             <button onclick="handleStatusClick(${dayIndex}, ${actualRowIndex}, 'completed')" 
-                                                    class="px-2.5 py-1.5 rounded-xl border font-bold text-[10px] uppercase tracking-wider transition duration-150 flex items-center justify-center gap-1 shadow-3xs ${
+                                                    class="flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase transition border-2 ${
                                                 isCompletedRow 
-                                                    ? 'bg-emerald-500 border-emerald-500 text-white font-black' 
-                                                    : 'bg-white border-slate-200 hover:border-emerald-400 text-slate-500 hover:text-emerald-600'
-                                            }" title="Mark Done">
-                                                <span>✓</span><span>Done</span>
+                                                    ? 'bg-emerald-500 border-emerald-500 text-white font-extrabold' 
+                                                    : 'border-emerald-200 text-emerald-600 hover:bg-emerald-50 bg-white'
+                                            }" title="Mark completed">
+                                                <i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>
+                                                <span>✓ Check</span>
                                             </button>
 
-                                            <!-- Skip Button -->
+                                            <!-- Red labeled Skip Button -->
                                             <button onclick="handleStatusClick(${dayIndex}, ${actualRowIndex}, 'skipped')" 
-                                                    class="px-2.5 py-1.5 rounded-xl border font-bold text-[10px] uppercase tracking-wider transition duration-150 flex items-center justify-center gap-1 shadow-3xs ${
+                                                    class="flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase transition border-2 ${
                                                 isSkippedRow 
-                                                    ? 'bg-rose-500 border-rose-500 text-white font-black' 
-                                                    : 'bg-white border-slate-200 hover:border-rose-400 text-slate-500 hover:text-rose-600'
-                                            }" title="Mark Skipped">
-                                                <span>✕</span><span>Skip</span>
+                                                    ? 'bg-rose-500 border-rose-500 text-white font-extrabold' 
+                                                    : 'border-rose-200 text-rose-600 hover:bg-rose-50 bg-white'
+                                            }" title="Mark skipped (not done)">
+                                                <i data-lucide="x" class="w-3 h-3 stroke-[3]"></i>
+                                                <span>✕ Skip</span>
                                             </button>
                                         </div>
 
@@ -3372,7 +3566,6 @@
             updateSkyScenery();
         }
 
-        // Check vs X status handler
         function handleStatusClick(dayIndex, rowIndex, newStatus) {
             const activePlan = itineraries.find(p => p.id === activePlanId);
             if (!activePlan) return;
@@ -3381,7 +3574,6 @@
             if (!row) return;
 
             if (row.status === newStatus) {
-                // Toggle back to pending
                 row.status = 'pending';
                 row.completed = false;
                 row.actualCost = 0;
@@ -3408,7 +3600,6 @@
             }
         }
 
-        // Automatically archive active plan if fully complete (Check or skipped X)
         function checkAndAutoArchivePlan(plan) {
             if (isPlanFullyCompleted(plan)) {
                 setTimeout(() => {
@@ -3494,7 +3685,6 @@
             checkAndAutoArchivePlan(activePlan);
         }
 
-        // TRIGGER SWITCH TIME SLOTS MODAL
         function triggerSwitchModal(dayIndex, rowIndex) {
             switchSourceDayIndex = dayIndex;
             switchSourceRowIndex = rowIndex;
@@ -3540,7 +3730,6 @@
             switchSourceRowIndex = null;
         }
 
-        // EXECUTE SLOT SWAPPING
         function handleExecuteSwapTime() {
             const activePlan = itineraries.find(p => p.id === activePlanId);
             if (!activePlan || switchSourceDayIndex === null || switchSourceRowIndex === null) return;
