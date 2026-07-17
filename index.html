@@ -1373,7 +1373,6 @@
 
         function initIDB() {
             return new Promise((resolve, reject) => {
-                // Fixed: DB version bumped to 9 to match 'WanderPlanIDB_v9' and prevent silent VersionErrors!
                 const request = indexedDB.open(DB_NAME, 9);
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
@@ -3849,11 +3848,18 @@
             const timeVal = document.getElementById('row-time').value;
             const endtimeVal = document.getElementById('row-endtime').value;
             const warningContainer = document.getElementById('overlap-warning-container');
+            const saveBtn = document.getElementById('row-modal-save-btn');
             
             if (!warningContainer) return;
             warningContainer.innerHTML = '';
             warningContainer.classList.add('hidden');
             overlappingRowIndexGlobal = null;
+
+            // Re-enable and reset style of save button on clean inputs
+            if (saveBtn) {
+                saveBtn.removeAttribute('disabled');
+                saveBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
 
             if (!timeVal || !endtimeVal || activeEditingDayIndex === null) return;
 
@@ -3885,21 +3891,31 @@
 
                 if (overlaps) {
                     overlappingRowIndexGlobal = i;
+                    
+                    const cleanPlaceName = row.activityType === 'transit' || row.activityType === 'homebound'
+                        ? `Transit: ${row.transitFrom} ➜ ${row.transitTo}`
+                        : row.place;
+
                     warningContainer.innerHTML = `
                         <div class="bg-rose-50 border-2 border-rose-200 text-rose-950 p-4 rounded-2xl text-xs font-semibold flex flex-col gap-2">
                             <p class="flex items-center gap-1.5 text-rose-800">
                                 <span>⚠️</span> <strong>Time Overlap Detected!</strong>
                             </p>
-                            <p>This slot overlaps with: <span class="font-bold">"${escapeHTML(row.place)}"</span> (${formatTime12Hour(row.time)} - ${formatTime12Hour(row.endTime)}).</p>
+                            <p>You can't set at this time, another itinerary has been added <strong class="text-rose-700">"${escapeHTML(cleanPlaceName)}"</strong>. Try another time!</p>
                             <div class="flex flex-wrap gap-2 mt-1">
-                                <button type="button" onclick="handleSwapOverlappingTimes(${i})" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-1.5 px-3 rounded-xl transition text-[10px] uppercase tracking-wider flex items-center gap-1.5 shadow-3xs cute-title">
-                                    🔄 Swap Time Slots
+                                <button type="button" onclick="handleSwapOverlappingTimes(${i})" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded-xl transition text-[10px] uppercase tracking-wider flex items-center gap-1.5 shadow-3xs cute-title">
+                                    🔄 Swap Slots Instantly
                                 </button>
-                                <span class="text-slate-400 self-center text-[10px]">or resolve manually below.</span>
                             </div>
                         </div>
                     `;
                     warningContainer.classList.remove('hidden');
+
+                    // Disable save and make it visually clear it is disabled
+                    if (saveBtn) {
+                        saveBtn.setAttribute('disabled', 'true');
+                        saveBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    }
                     break;
                 }
             }
@@ -3961,6 +3977,12 @@
             document.querySelectorAll('.modal-currency-indicator').forEach(el => {
                 el.innerText = currentCurrency;
             });
+
+            // Reset save button disabled state
+            if (saveBtn) {
+                saveBtn.removeAttribute('disabled');
+                saveBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
 
             if (rowIndex !== null && activePlan) {
                 const row = activePlan.days[dayIndex].rows[rowIndex];
@@ -4032,6 +4054,13 @@
 
             const errorHint = document.getElementById('row-error-hint');
 
+            // Strictly check for active overlaps before proceeding with saving
+            if (overlappingRowIndexGlobal !== null) {
+                errorHint.innerText = "⚠️ Time slot conflict detected! Please select a non-overlapping time before saving.";
+                errorHint.classList.remove('hidden');
+                return;
+            }
+
             if (activityTypeVal === 'explore' || activityTypeVal === 'resting') {
                 if (!placeVal) {
                     errorHint.innerText = "Please fill in the Activity & Location Name!";
@@ -4095,7 +4124,8 @@
                 const backupPayload = {
                     itineraries: itineraries,
                     profiles: characterProfiles,
-                    selectedCharId: activeCharacterIds
+                    selectedCharId: activeCharacterIds,
+                    backgrounds: uploadedBackgrounds
                 };
                 
                 const backupString = JSON.stringify(backupPayload, null, 2);
@@ -4189,6 +4219,7 @@
                     let importedItineraries = [];
                     let importedProfiles = [];
                     let importedSelection = [];
+                    let importedBackgrounds = null;
 
                     if (Array.isArray(parsed)) {
                         importedItineraries = parsed;
@@ -4196,6 +4227,7 @@
                         importedItineraries = parsed.itineraries;
                         importedProfiles = parsed.profiles || [];
                         importedSelection = parsed.selectedCharId || [];
+                        importedBackgrounds = parsed.backgrounds || null;                    
                     } else {
                         throw new Error("Backup file is missing travel itinerary lists.");
                     }
@@ -4209,6 +4241,10 @@
                     itineraries = importedItineraries;
                     characterProfiles = importedProfiles;
                     activeCharacterIds = Array.isArray(importedSelection) ? importedSelection : [importedSelection];
+
+                    if (importedBackgrounds) {
+                        uploadedBackgrounds = { ...uploadedBackgrounds, ...importedBackgrounds };
+                    }
 
                     if (itineraries.length > 0) {
                         const firstActive = itineraries.find(p => !p.archived);
@@ -4224,17 +4260,26 @@
                         for (let profile of characterProfiles) {
                             await saveProfileToIDB(databaseConnection, profile);
                         }
+                        if (importedBackgrounds) {
+                            for (let slotKey in importedBackgrounds) {
+                                if (importedBackgrounds[slotKey]) {
+                                    await saveBackgroundToIDB(databaseConnection, slotKey, importedBackgrounds[slotKey]);
+                                }
+                            }
+                        }
                     }
 
                     localStorage.setItem(CHAR_SELECTION_KEY, JSON.stringify(activeCharacterIds));
                     renderPlansList();
                     updateGlobalStats();
                     renderActivePlan();
+                    renderBackgroundPreviews();
+                    updateSkyScenery();
                     switchPage('mainpage');
 
                     openWarningModal(
                         "🎉 Backup Restored Successfully!",
-                        `Loaded ${itineraries.length} itineraries and ${characterProfiles.length} companion profiles safely into your iPhone database.`,
+                        `Loaded ${itineraries.length} itineraries, ${characterProfiles.length} companion profiles, and all weather sceneries safely.`,
                         () => {}
                     );
                     document.getElementById('modal-confirm-btn').innerText = "Awesome!";
@@ -4400,10 +4445,8 @@
                     };
 
                     saveToStorage();
-                    renderPlansList();
-                    updateGlobalStats();
-                    renderActivePlan();
-                    switchPage('mainpage');
+                    activePlanId = null;
+                    renderPlansList();switchPage('mainpage');
                 }
             );
         }
