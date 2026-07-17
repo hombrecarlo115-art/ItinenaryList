@@ -224,8 +224,8 @@
         </div>
 
         <div class="p-6 border-t border-orange-50 bg-amber-50/20 text-center">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">WanderPlan App v6.5</span>
-            <p class="text-[9px] text-slate-400 mt-0.5">With Check/Skip Pills & Interactive Soundscapes</p>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">WanderPlan App v6.6</span>
+            <p class="text-[9px] text-slate-400 mt-0.5">With Dynamic Eating States & Interactive Soundscapes</p>
         </div>
     </div>
 
@@ -309,7 +309,7 @@
                 <!-- Dropdown settings wrapper card -->
                 <div class="bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-orange-100 shadow-sm flex flex-col gap-3 w-full md:w-96 relative">
                     
-                    <!-- Permanent Top Bar: Clean Clock and Toggle Button only (iPhone 15 Optimized) -->
+                    <!-- Permanent Top Bar -->
                     <div class="flex items-center justify-between gap-2 w-full">
                         <div class="shrink-0">
                             <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Clock (HH:MM:SS)</p>
@@ -328,7 +328,7 @@
 
                     <!-- Hidden Dropdown Settings Panel -->
                     <div id="banner-controls-dropdown" class="hidden flex flex-col gap-3 pt-3 border-t border-slate-100/70">
-                        <!-- Volume & Sound Mute Combo inside unhide dropdown (iPhone 15 layout) -->
+                        <!-- Volume & Sound Mute Combo inside unhide dropdown -->
                         <div class="flex items-center justify-between gap-2 bg-pink-50/50 border border-pink-100 p-2.5 rounded-xl">
                             <span class="text-[10px] text-pink-800 font-extrabold uppercase tracking-wider flex items-center gap-1">
                                 <i data-lucide="music" class="w-3.5 h-3.5"></i> State Ambient:
@@ -840,7 +840,7 @@
         </div>
     </div>
 
-    <!-- ARCHIVED DETAIL MODAL VIEW (New Interactive Feature) -->
+    <!-- ARCHIVED DETAIL MODAL VIEW -->
     <div id="archived-detail-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center">
             <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" onclick="closeArchivedDetailModal()"></div>
@@ -859,9 +859,7 @@
                     </button>
                 </div>
 
-                <div id="archived-modal-content-area" class="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
-                    <!-- Populated dynamically -->
-                </div>
+                <div id="archived-modal-content-area" class="space-y-4 max-h-[60vh] overflow-y-auto pr-1"></div>
 
                 <div class="mt-6 flex justify-between items-center border-t border-slate-100 pt-4">
                     <div class="text-left">
@@ -1159,7 +1157,7 @@
         const STORAGE_KEY = 'wanderplan_itineraries_v3';
         const CHAR_SELECTION_KEY = 'wanderplan_selected_char_v4';
         
-        const DB_NAME = 'WanderPlanIDB_v8'; 
+        const DB_NAME = 'WanderPlanIDB_v9'; 
         const STORE_NAME = 'characterProfiles';
         const BG_STORE_NAME = 'scenicBackgrounds';
         const SCENERY_LAYERS_KEY = 'wanderplan_scenery_layers_v1';
@@ -1184,8 +1182,8 @@
         let masterAudioLoopPlayer = new Audio();
         masterAudioLoopPlayer.loop = true;
         let activeAudioStateString = null;
-        let isGlobalAudioUnmuted = true; // Enabled by default to support autoplay
-        let globalVolumeLevel = 0.5; // Default volume level
+        let isGlobalAudioUnmuted = true; 
+        let globalVolumeLevel = 0.5; 
 
         // Scenery element state manager with responsive live toggles
         let sceneryLayers = {
@@ -1375,7 +1373,8 @@
 
         function initIDB() {
             return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, 4);
+                // Fixed: DB version bumped to 9 to match 'WanderPlanIDB_v9' and prevent silent VersionErrors!
+                const request = indexedDB.open(DB_NAME, 9);
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
                     if (!db.objectStoreNames.contains(STORE_NAME)) {
@@ -1480,13 +1479,15 @@
                         transit: null, transitFlipped: false,
                         homebound: null, homeboundFlipped: false,
                         preparing: null, preparingFlipped: false,
+                        eating: null, eatingFlipped: false, 
                         wavingRainy: null, wavingRainyFlipped: false,
                         walkingRainy: null, walkingRainyFlipped: false,
                         sleepingRainy: null, sleepingRainyFlipped: false,
                         transitRainy: null, transitRainyFlipped: false,
                         homeboundRainy: null, homeboundRainyFlipped: false,
                         preparingRainy: null, preparingRainyFlipped: false,
-                        wavingMusic: null, walkingMusic: null, sleepingMusic: null, transitMusic: null, homeboundMusic: null, preparingMusic: null
+                        eatingRainy: null, eatingRainyFlipped: false, 
+                        wavingMusic: null, walkingMusic: null, sleepingMusic: null, transitMusic: null, homeboundMusic: null, preparingMusic: null, eatingMusic: null 
                     };
                     characterProfiles.push(defaultBuddy);
                     await saveProfileToIDB(databaseConnection, defaultBuddy);
@@ -2072,6 +2073,12 @@
 
             let currentScenicState = 'waving'; 
 
+            // Detect Scheduled Eating intervals if no active plan interferes
+            const isBreakfastTime = (simulatedTimeMinutes >= 420 && simulatedTimeMinutes <= 450);  // 7:00 - 7:30 AM
+            const isLunchTime = (simulatedTimeMinutes >= 720 && simulatedTimeMinutes <= 750);      // 12:00 - 12:30 PM
+            const isDinnerTime = (simulatedTimeMinutes >= 1080 && simulatedTimeMinutes <= 1110);    // 6:00 - 6:30 PM
+            const isEatingTimeActive = !hasActiveTaskRightNow && (isBreakfastTime || isLunchTime || isDinnerTime);
+
             if (hasActiveTaskRightNow) {
                 if (activeTaskStyle === 'transit') {
                     banner.classList.add('scenic-state-walking');
@@ -2087,6 +2094,10 @@
                     banner.classList.add('scenic-state-walking');
                     currentScenicState = 'walking';
                 }
+            } else if (isEatingTimeActive) {
+                banner.classList.add('scenic-state-waiting');
+                road.classList.add('hidden');
+                currentScenicState = 'eating';
             } else {
                 if (simulatedTimeMinutes >= 1320 || simulatedTimeMinutes < 360) { 
                     currentScenicState = 'sleeping';
@@ -2168,6 +2179,10 @@
                     fallbackIcon = "🍳";
                     borderTheme = "border-rose-300 bg-rose-50/20 text-rose-800";
                     bgBadge = "bg-rose-100 text-rose-900 border-rose-200";
+                } else if (scenicState === 'eating') {
+                    fallbackIcon = "🍲";
+                    borderTheme = "border-amber-300 bg-amber-400/20 text-amber-800";
+                    bgBadge = "bg-amber-100 text-amber-900 border-amber-200";
                 } else if (scenicState === 'walking') {
                     fallbackIcon = "🚶‍♂️";
                     borderTheme = "border-amber-300 bg-amber-400/20 text-amber-800";
@@ -2272,6 +2287,10 @@
                     statusTitle.innerText = "On the Move 🚶‍♂️";
                     statusDesc.innerText = `Next stop: ${escapeHTML(activeTaskRow.place)}`;
                 }
+            } else if (currentScenicState === 'eating') {
+                speechTextEl.innerText = `Mmm! ${namesStr} are enjoying a yummy meal! 🍲😋`;
+                statusTitle.innerText = "Meal Time 🍲";
+                statusDesc.innerText = "Having a delicious bite!";
             } else {
                 if (nextFuturePlan && (currentScenicState === 'waving' || currentScenicState === 'preparing')) {
                     speechTextEl.innerText = `We are so Excited to visit ${escapeHTML(nextFuturePlan.place)} on ${formatDate(nextFuturePlan.date)}! See you there! ✨`;
@@ -2369,13 +2388,13 @@
                 const isActive = activeCharacterIds.includes(char.id);
                 
                 let uploadCount = 0;
-                ['waving', 'walking', 'sleeping', 'transit', 'homebound', 'preparing',
-                 'wavingRainy', 'walkingRainy', 'sleepingRainy', 'transitRainy', 'homeboundRainy', 'preparingRainy'].forEach(st => {
+                ['waving', 'walking', 'sleeping', 'transit', 'homebound', 'preparing', 'eating',
+                 'wavingRainy', 'walkingRainy', 'sleepingRainy', 'transitRainy', 'homeboundRainy', 'preparingRainy', 'eatingRainy'].forEach(st => {
                     if (char[st]) uploadCount++;
                 });
 
                 let musicCount = 0;
-                ['wavingMusic', 'walkingMusic', 'sleepingMusic', 'transitMusic', 'homeboundMusic', 'preparingMusic'].forEach(m => {
+                ['wavingMusic', 'walkingMusic', 'sleepingMusic', 'transitMusic', 'homeboundMusic', 'preparingMusic', 'eatingMusic'].forEach(m => {
                     if (char[m]) musicCount++;
                 });
 
@@ -2390,9 +2409,9 @@
                     <div>
                         <div class="flex items-center justify-between mb-1 min-w-0">
                             <h4 class="cute-title text-sm font-extrabold text-slate-800 truncate">${escapeHTML(char.name)}</h4>
-                            <div class="flex flex-col text-right">
-                                <span class="text-[8px] bg-slate-100 text-slate-600 px-1 py-0.5 rounded font-bold">${uploadCount}/12 GIFs</span>
-                                <span class="text-[8px] bg-emerald-50 text-emerald-700 px-1 py-0.5 rounded font-bold mt-0.5">${musicCount}/6 Tracks</span>
+                            <div class="flex flex-col text-right shrink-0">
+                                <span class="text-[8px] bg-slate-100 text-slate-600 px-1 py-0.5 rounded font-bold">${uploadCount}/14 GIFs</span>
+                                <span class="text-[8px] bg-emerald-50 text-emerald-700 px-1 py-0.5 rounded font-bold mt-0.5">${musicCount}/7 Tracks</span>
                             </div>
                         </div>
                         <p class="text-[10px] text-slate-400 font-semibold mb-3">Custom transparent animations & soundtracks stored safely.</p>
@@ -2437,119 +2456,6 @@
             updateSkyScenery();
         }
 
-        async function handleCreateCharacterProfile() {
-            const input = document.getElementById('new-char-name');
-            const nameVal = input.value.trim();
-
-            if (!nameVal) {
-                openWarningModal(
-                    "Name Required! ⚠️",
-                    "Please give your custom companion a cute name before launching their profile.",
-                    () => {}
-                );
-                document.getElementById('modal-confirm-btn').innerText = "Understood";
-                return;
-            }
-
-            const newChar = {
-                id: 'char_' + Date.now(),
-                name: nameVal,
-                waving: null, wavingFlipped: false,
-                walking: null, walkingFlipped: false,
-                sleeping: null, sleepingFlipped: false,
-                transit: null, transitFlipped: false,
-                homebound: null, homeboundFlipped: false,
-                preparing: null, preparingFlipped: false,
-                wavingRainy: null, wavingRainyFlipped: false,
-                walkingRainy: null, walkingRainyFlipped: false,
-                sleepingRainy: null, sleepingRainyFlipped: false,
-                transitRainy: null, transitRainyFlipped: false,
-                homeboundRainy: null, homeboundRainyFlipped: false,
-                preparingRainy: null, preparingRainyFlipped: false,
-                wavingMusic: null, walkingMusic: null, sleepingMusic: null, transitMusic: null, homeboundMusic: null, preparingMusic: null
-            };
-
-            characterProfiles.push(newChar);
-            selectedCharacterId = newChar.id; 
-            
-            if (!activeCharacterIds.includes(newChar.id)) {
-                activeCharacterIds.push(newChar.id);
-            }
-            input.value = '';
-
-            try {
-                if (databaseConnection) {
-                    await saveProfileToIDB(databaseConnection, newChar);
-                }
-            } catch (err) {
-                console.error("IndexedDB failed saving new profile", err);
-            }
-
-            localStorage.setItem(CHAR_SELECTION_KEY, JSON.stringify(activeCharacterIds));
-            renderCharacterProfiles();
-        }
-
-        function handleToggleCompanionActive(id) {
-            if (activeCharacterIds.includes(id)) {
-                activeCharacterIds = activeCharacterIds.filter(cid => cid !== id);
-            } else {
-                activeCharacterIds.push(id);
-            }
-            localStorage.setItem(CHAR_SELECTION_KEY, JSON.stringify(activeCharacterIds));
-            renderCharacterProfiles();
-        }
-
-        function handleSetCustomizerEditingProfile(id) {
-            selectedCharacterId = id;
-            renderCharacterProfiles();
-        }
-
-        async function toggleStateFlip(stateKey) {
-            const activeProfile = characterProfiles.find(c => c.id === selectedCharacterId);
-            if (!activeProfile) return;
-
-            const keys = getActiveStateKeys(stateKey);
-            activeProfile[keys.flip] = !activeProfile[keys.flip];
-
-            try {
-                if (databaseConnection) {
-                    await saveProfileToIDB(databaseConnection, activeProfile);
-                }
-            } catch (err) {
-                console.error("Failed to toggle flip for state " + stateKey, err);
-            }
-
-            renderCharacterProfiles();
-        }
-
-        function triggerDeleteCharacterProfile(id) {
-            const target = characterProfiles.find(c => c.id === id);
-            if (!target) return;
-
-            openWarningModal(
-                `Delete "${target.name}"?`,
-                "This permanently clears this custom companion profile and all of its uploaded state files from your database.",
-                async () => {
-                    characterProfiles = characterProfiles.filter(c => c.id !== id);
-                    activeCharacterIds = activeCharacterIds.filter(cid => cid !== id);
-                    
-                    if (selectedCharacterId === id) {
-                        selectedCharacterId = characterProfiles.length > 0 ? characterProfiles[0].id : null; 
-                    }
-                    try {
-                        if (databaseConnection) {
-                            await deleteProfileFromIDB(databaseConnection, id);
-                        }
-                    } catch (err) {
-                        console.error("IndexedDB deletion error", err);
-                    }
-                    localStorage.setItem(CHAR_SELECTION_KEY, JSON.stringify(activeCharacterIds));
-                    renderCharacterProfiles();
-                }
-            );
-            document.getElementById('modal-confirm-btn').innerText = "Yes, Delete Buddy";
-        }
-
         function renderCharacterCustomizer(profile) {
             const gridContainer = document.getElementById('customizer-assets-grid');
             if (!gridContainer) return;
@@ -2561,7 +2467,8 @@
                 { key: 'sleeping', label: 'Sleep Hours', icon: '😴', desc: 'Night bedtime sleep segment logic' },
                 { key: 'transit', label: 'Transit Stage', icon: '🚗', desc: 'Routing transport, flights or navigation tracks' },
                 { key: 'homebound', label: 'End Trip', icon: '🏡', desc: 'Going home leg back to original coordinate' },
-                { key: 'preparing', label: 'Morning Prep', icon: '🍳', desc: 'Cozy breakfast preparations visual representation' }
+                { key: 'preparing', label: 'Morning Prep', icon: '🍳', desc: 'Cozy breakfast preparations visual representation' },
+                { key: 'eating', label: 'Eating State', icon: '🍲', desc: 'Yummy breakfast, lunch, or dinner eating animation' }
             ];
 
             states.forEach(state => {
@@ -2574,6 +2481,7 @@
                 else if (state.key === 'transit') badgeColor = "text-blue-600 bg-blue-50 border-blue-100";
                 else if (state.key === 'homebound') badgeColor = "text-teal-600 bg-teal-50 border-teal-100";
                 else if (state.key === 'preparing') badgeColor = "text-rose-600 bg-rose-50 border-rose-100";
+                else if (state.key === 'eating') badgeColor = "text-amber-700 bg-amber-100 border-amber-200";
 
                 if (customizerTab === 'music') {
                     // MUSIC TAB LAYOUT
@@ -2753,6 +2661,109 @@
             } catch (err) {
                 console.error("IndexedDB failed to reset key", err);
             }
+            renderCharacterProfiles();
+        }
+
+        async function handleCreateCharacterProfile() {
+            const nameInput = document.getElementById('new-char-name');
+            if (!nameInput) return;
+            const name = nameInput.value.trim();
+            if (!name) return;
+
+            const newChar = {
+                id: 'char_' + Date.now(),
+                name: name,
+                waving: null, wavingFlipped: false,
+                walking: null, walkingFlipped: false,
+                sleeping: null, sleepingFlipped: false,
+                transit: null, transitFlipped: false,
+                homebound: null, homeboundFlipped: false,
+                preparing: null, preparingFlipped: false,
+                eating: null, eatingFlipped: false, 
+                wavingRainy: null, wavingRainyFlipped: false,
+                walkingRainy: null, walkingRainyFlipped: false,
+                sleepingRainy: null, sleepingRainyFlipped: false,
+                transitRainy: null, transitRainyFlipped: false,
+                homeboundRainy: null, homeboundRainyFlipped: false,
+                preparingRainy: null, preparingRainyFlipped: false,
+                eatingRainy: null, eatingRainyFlipped: false, 
+                wavingMusic: null, walkingMusic: null, sleepingMusic: null, transitMusic: null, homeboundMusic: null, preparingMusic: null, eatingMusic: null 
+            };
+
+            characterProfiles.push(newChar);
+            nameInput.value = '';
+
+            try {
+                if (databaseConnection) {
+                    await saveProfileToIDB(databaseConnection, newChar);
+                }
+            } catch (err) {
+                console.error("IndexedDB failed to save new companion profile", err);
+            }
+
+            selectedCharacterId = newChar.id;
+            renderCharacterProfiles();
+        }
+
+        function handleToggleCompanionActive(id) {
+            const index = activeCharacterIds.indexOf(id);
+            if (index > -1) {
+                activeCharacterIds.splice(index, 1);
+            } else {
+                activeCharacterIds.push(id);
+            }
+            localStorage.setItem(CHAR_SELECTION_KEY, JSON.stringify(activeCharacterIds));
+            renderCharacterProfiles();
+        }
+
+        function handleSetCustomizerEditingProfile(id) {
+            selectedCharacterId = id;
+            renderCharacterProfiles();
+        }
+
+        function triggerDeleteCharacterProfile(id) {
+            if (id === 'char_default') return; // Default companion cannot be deleted
+            
+            openWarningModal(
+                "Delete Companion Profile?",
+                "This will permanently erase this companion and all of their uploaded sunny/rainy GIFs and soundtracks.",
+                async () => {
+                    characterProfiles = characterProfiles.filter(c => c.id !== id);
+                    activeCharacterIds = activeCharacterIds.filter(cid => cid !== id);
+                    localStorage.setItem(CHAR_SELECTION_KEY, JSON.stringify(activeCharacterIds));
+                    
+                    if (selectedCharacterId === id) {
+                        selectedCharacterId = characterProfiles.length > 0 ? characterProfiles[0].id : null;
+                    }
+
+                    try {
+                        if (databaseConnection) {
+                            await deleteProfileFromIDB(databaseConnection, id);
+                        }
+                    } catch (err) {
+                        console.error("IndexedDB failed to delete companion profile", err);
+                    }
+
+                    renderCharacterProfiles();
+                }
+            );
+        }
+
+        async function toggleStateFlip(stateKey) {
+            const activeProfile = characterProfiles.find(c => c.id === selectedCharacterId);
+            if (!activeProfile) return;
+
+            const keys = getActiveStateKeys(stateKey);
+            activeProfile[keys.flip] = !activeProfile[keys.flip];
+
+            try {
+                if (databaseConnection) {
+                    await saveProfileToIDB(databaseConnection, activeProfile);
+                }
+            } catch (err) {
+                console.error("IndexedDB failed to save flip configuration", err);
+            }
+
             renderCharacterProfiles();
         }
 
@@ -3460,9 +3471,7 @@
                                 <div class="p-4 sm:px-6 hover:bg-slate-50/40 transition duration-150 flex flex-col md:flex-row md:items-center justify-between gap-4 ${isCompletedRow ? 'bg-emerald-50/20' : ''} ${isSkippedRow ? 'bg-rose-50/10 opacity-70' : ''}">
                                     
                                     <div class="flex items-start gap-3 flex-1 min-w-0">
-                                        <!-- Descriptive Check & Skip Buttons (New Request Option) -->
                                         <div class="flex flex-row md:flex-col gap-1.5 shrink-0 mt-1">
-                                            <!-- Green labeled Check Button -->
                                             <button onclick="handleStatusClick(${dayIndex}, ${actualRowIndex}, 'completed')" 
                                                     class="flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase transition border-2 ${
                                                 isCompletedRow 
@@ -3473,7 +3482,6 @@
                                                 <span>✓ Check</span>
                                             </button>
 
-                                            <!-- Red labeled Skip Button -->
                                             <button onclick="handleStatusClick(${dayIndex}, ${actualRowIndex}, 'skipped')" 
                                                     class="flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase transition border-2 ${
                                                 isSkippedRow 
@@ -3542,7 +3550,6 @@
 
                                     <!-- Actions control block -->
                                     <div class="flex items-center gap-1 shrink-0 self-end sm:self-auto">
-                                        <!-- Switch button overlay -->
                                         <button onclick="triggerSwitchModal(${dayIndex}, ${actualRowIndex})" class="bg-blue-50 text-blue-600 hover:bg-blue-100 p-2 rounded-xl border border-blue-100 transition flex items-center gap-1 text-xs font-bold" title="Switch time with another activity">
                                             <i data-lucide="shuffle" class="w-4 h-4"></i> Switch
                                         </button>
@@ -4112,7 +4119,7 @@
                         URL.revokeObjectURL(url);
                     }, 100);
                 } catch (err) {
-                    console.warn("Direct blob download failed or was blocked by iOS security policies.", err);
+                    console.warn("Direct blob download blocked by security policies.", err);
                 }
 
                 const exportModal = document.getElementById('ios-export-modal');
