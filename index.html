@@ -306,79 +306,21 @@
 
             <!-- Controls Deck inside Scenery -->
             <div class="z-30 relative flex flex-col md:flex-row justify-between items-start w-full pointer-events-auto gap-3">
-                <!-- Dropdown settings wrapper card -->
-                <div class="bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-orange-100 shadow-sm flex flex-col gap-3 w-full md:w-96 relative">
+                <!-- Clean Non-blocking Clock Bar (Moved configuration details down to the Settings page!) -->
+                <div class="bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-orange-100 shadow-sm flex items-center justify-between gap-4 w-full md:w-96 relative">
+                    <div class="shrink-0">
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Clock (HH:MM:SS)</p>
+                        <div class="flex items-center gap-1.5">
+                            <span id="banner-clock-time" class="text-xs sm:text-sm font-extrabold text-slate-800 cute-title">12:00:00 PM</span>
+                            <span id="banner-period-badge" class="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.5 rounded font-bold uppercase">Noon</span>
+                        </div>
+                    </div>
                     
-                    <!-- Permanent Top Bar -->
-                    <div class="flex items-center justify-between gap-2 w-full">
-                        <div class="shrink-0">
-                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Clock (HH:MM:SS)</p>
-                            <div class="flex items-center gap-1.5">
-                                <span id="banner-clock-time" class="text-xs sm:text-sm font-extrabold text-slate-800 cute-title">12:00:00 PM</span>
-                                <span id="banner-period-badge" class="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.5 rounded font-bold uppercase">Noon</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Toggle Settings Panel Button (Unhide / Hide) -->
-                        <button id="toggle-banner-controls-btn" onclick="toggleBannerControlsDropdown()" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-1.5 px-3 rounded-xl text-xs flex items-center gap-1.5 transition cute-title shadow-3xs" title="Toggle time controls, sound volume and weather sliders">
-                            <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
-                            <span id="banner-controls-btn-text">Unhide</span>
-                        </button>
-                    </div>
-
-                    <!-- Hidden Dropdown Settings Panel -->
-                    <div id="banner-controls-dropdown" class="hidden flex flex-col gap-3 pt-3 border-t border-slate-100/70">
-                        <!-- Volume & Sound Mute Combo inside unhide dropdown -->
-                        <div class="flex items-center justify-between gap-2 bg-pink-50/50 border border-pink-100 p-2.5 rounded-xl">
-                            <span class="text-[10px] text-pink-800 font-extrabold uppercase tracking-wider flex items-center gap-1">
-                                <i data-lucide="music" class="w-3.5 h-3.5"></i> State Ambient:
-                            </span>
-                            <div class="flex items-center gap-2 bg-white border border-slate-100 px-2 py-1 rounded-xl">
-                                <!-- Sound play toggle -->
-                                <button id="btn-global-audio-mute" onclick="toggleGlobalAudioMute()" class="p-1 text-slate-500 hover:text-amber-500 transition" title="Toggle Sound">
-                                    <i id="audio-mute-icon" data-lucide="volume-2" class="w-4 h-4"></i>
-                                </button>
-                                <input id="audio-volume-slider" type="range" min="0" max="1" step="0.05" value="0.5" oninput="handleVolumeChange(this.value)" class="w-14 sm:w-16 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500" title="Adjust Volume">
-                            </div>
-                        </div>
-
-                        <!-- Time scrub slider -->
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>
-                            <input id="time-slider" type="range" min="0" max="1439" value="720" oninput="handleTimeSliderChange(this.value)" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500">
-                            <i data-lucide="moon" class="w-3.5 h-3.5 text-indigo-500 shrink-0"></i>
-                        </div>
-
-                        <!-- INDEPENDENT TIME-SLOT RAINY QUICK TOGGLES -->
-                        <div class="bg-blue-50/70 border border-blue-100 p-2.5 rounded-xl">
-                            <span class="text-[9px] text-blue-800 font-extrabold uppercase tracking-wide block mb-1.5">🌧️ Rainy weather per period:</span>
-                            <div class="grid grid-cols-4 sm:grid-cols-7 gap-1 text-[9px] font-bold text-slate-600">
-                                <button onclick="quickToggleRainyPeriod('dawn')" id="quick-rainy-dawn" class="py-1 rounded bg-white hover:bg-slate-100 border transition">🌅 Dawn</button>
-                                <button onclick="quickToggleRainyPeriod('morning')" id="quick-rainy-morning" class="py-1 rounded bg-white hover:bg-slate-100 border transition">☀️ Morn</button>
-                                <button onclick="quickToggleRainyPeriod('noon')" id="quick-rainy-noon" class="py-1 rounded bg-white hover:bg-slate-100 border transition">🌤️ Noon</button>
-                                <button onclick="quickToggleRainyPeriod('afternoon')" id="quick-rainy-afternoon" class="py-1 rounded bg-white hover:bg-slate-100 border transition">🌇 Aft</button>
-                                <button onclick="quickToggleRainyPeriod('dusk')" id="quick-rainy-dusk" class="py-1 rounded bg-white hover:bg-slate-100 border transition">🌆 Dusk</button>
-                                <button onclick="quickToggleRainyPeriod('evening')" id="quick-rainy-evening" class="py-1 rounded bg-white hover:bg-slate-100 border transition">🌌 Eve</button>
-                                <button onclick="quickToggleRainyPeriod('night')" id="quick-rainy-night" class="py-1 rounded bg-white hover:bg-slate-100 border transition col-span-1">🌃 Night</button>
-                            </div>
-                        </div>
-
-                        <!-- Options checklist -->
-                        <div class="flex flex-col gap-1.5 text-[10px] text-slate-500">
-                            <label class="flex items-center gap-2 font-semibold cursor-pointer select-none">
-                                <input type="checkbox" id="live-clock-toggle" checked onchange="toggleLiveClock(this.checked)" class="rounded text-amber-500 focus:ring-amber-400 w-3.5 h-3.5 cursor-pointer">
-                                <span>Live Local Time</span>
-                            </label>
-                            <label class="flex items-center gap-2 font-semibold cursor-pointer select-none">
-                                <input type="checkbox" id="sync-itinerary-time" checked class="rounded text-amber-500 focus:ring-amber-400 w-3.5 h-3.5 cursor-pointer">
-                                <span>Sync Active Task</span>
-                            </label>
-                            <label class="flex items-center gap-2 font-semibold cursor-pointer select-none" title="Forces plan to behave as if today is the planned itinerary date to test animations!">
-                                <input type="checkbox" id="force-simulate-today" checked class="rounded text-amber-500 focus:ring-amber-400 w-3.5 h-3.5 cursor-pointer" onchange="updateSkyScenery()">
-                                <span class="text-amber-700 font-bold">Simulate Travel Day</span>
-                            </label>
-                        </div>
-                    </div>
+                    <!-- Direct Link to Settings Page for scenery adjustments -->
+                    <button onclick="switchPage('settings')" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-1.5 px-3 rounded-xl text-xs flex items-center gap-1.5 transition cute-title shadow-3xs hover:scale-105 duration-150" title="Go to Settings to adjust scenery environment controls">
+                        <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                        <span>Configure Scenery</span>
+                    </button>
                 </div>
 
                 <div class="hidden md:block text-right bg-white/60 backdrop-blur-xs px-2.5 py-1.5 rounded-xl border border-white/40">
@@ -767,6 +709,70 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Environment & Time Simulation card (Moved from Banner for optimal animation view!) -->
+                    <div class="bg-white border border-amber-200/60 p-6 rounded-2xl shadow-3xs md:col-span-2 lg:col-span-1">
+                        <h3 class="cute-title text-base font-bold text-amber-950 flex items-center gap-2 mb-2">
+                            <span>🌍</span> Scenery Environment Controls
+                        </h3>
+                        <p class="text-slate-400 text-xs mb-4 font-semibold">Fine-tune simulation parameters, ambient soundtracks, and weather cycles.</p>
+                        
+                        <div class="flex flex-col gap-4">
+                            <!-- Volume & Sound Mute Combo -->
+                            <div class="flex items-center justify-between gap-2 bg-pink-50/50 border border-pink-100 p-3 rounded-xl">
+                                <span class="text-[10px] text-pink-800 font-extrabold uppercase tracking-wider flex items-center gap-1">
+                                    <i data-lucide="music" class="w-3.5 h-3.5"></i> State Ambient:
+                                </span>
+                                <div class="flex items-center gap-2 bg-white border border-slate-150 px-2 py-1 rounded-xl">
+                                    <!-- Sound play toggle -->
+                                    <button id="btn-global-audio-mute" onclick="toggleGlobalAudioMute()" class="p-1 text-slate-500 hover:text-amber-500 transition" title="Toggle Sound">
+                                        <i id="audio-mute-icon" data-lucide="volume-2" class="w-4 h-4"></i>
+                                    </button>
+                                    <input id="audio-volume-slider" type="range" min="0" max="1" step="0.05" value="0.5" oninput="handleVolumeChange(this.value)" class="w-14 sm:w-16 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500" title="Adjust Volume">
+                                </div>
+                            </div>
+
+                            <!-- Time scrub slider -->
+                            <div class="space-y-1">
+                                <label class="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Time Slider Scrub:</label>
+                                <div class="flex items-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                    <i data-lucide="sun" class="w-4 h-4 text-amber-500 shrink-0"></i>
+                                    <input id="time-slider" type="range" min="0" max="1439" value="720" oninput="handleTimeSliderChange(this.value)" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                                    <i data-lucide="moon" class="w-4 h-4 text-indigo-500 shrink-0"></i>
+                                </div>
+                            </div>
+
+                            <!-- INDEPENDENT TIME-SLOT RAINY QUICK TOGGLES -->
+                            <div class="bg-blue-50/70 border border-blue-100 p-3 rounded-xl">
+                                <span class="text-[10px] text-blue-800 font-extrabold uppercase tracking-wide block mb-2">🌧️ Rainy Weather Quick Toggles:</span>
+                                <div class="grid grid-cols-4 sm:grid-cols-7 lg:grid-cols-4 xl:grid-cols-7 gap-1 text-[9px] font-bold text-slate-600">
+                                    <button onclick="quickToggleRainyPeriod('dawn')" id="quick-rainy-dawn" class="py-1 rounded bg-white hover:bg-slate-100 border transition">🌅 Dawn</button>
+                                    <button onclick="quickToggleRainyPeriod('morning')" id="quick-rainy-morning" class="py-1 rounded bg-white hover:bg-slate-100 border transition">☀️ Morn</button>
+                                    <button onclick="quickToggleRainyPeriod('noon')" id="quick-rainy-noon" class="py-1 rounded bg-white hover:bg-slate-100 border transition">🌤️ Noon</button>
+                                    <button onclick="quickToggleRainyPeriod('afternoon')" id="quick-rainy-afternoon" class="py-1 rounded bg-white hover:bg-slate-100 border transition">🌇 Aft</button>
+                                    <button onclick="quickToggleRainyPeriod('dusk')" id="quick-rainy-dusk" class="py-1 rounded bg-white hover:bg-slate-100 border transition">🌆 Dusk</button>
+                                    <button onclick="quickToggleRainyPeriod('evening')" id="quick-rainy-evening" class="py-1 rounded bg-white hover:bg-slate-100 border transition">🌌 Eve</button>
+                                    <button onclick="quickToggleRainyPeriod('night')" id="quick-rainy-night" class="py-1 rounded bg-white hover:bg-slate-100 border transition col-span-1">🌃 Night</button>
+                                </div>
+                            </div>
+
+                            <!-- Options checklist -->
+                            <div class="bg-slate-50 border border-slate-100 p-3 rounded-xl flex flex-col gap-2.5 text-[10px] text-slate-500">
+                                <label class="flex items-center gap-2 font-bold cursor-pointer select-none text-slate-700">
+                                    <input type="checkbox" id="live-clock-toggle" checked onchange="toggleLiveClock(this.checked)" class="rounded text-amber-500 focus:ring-amber-400 w-4 h-4 cursor-pointer">
+                                    <span>Live Local Clock</span>
+                                </label>
+                                <label class="flex items-center gap-2 font-bold cursor-pointer select-none text-slate-700">
+                                    <input type="checkbox" id="sync-itinerary-time" checked class="rounded text-amber-500 focus:ring-amber-400 w-4 h-4 cursor-pointer">
+                                    <span>Sync Active Task</span>
+                                </label>
+                                <label class="flex items-center gap-2 font-bold cursor-pointer select-none text-slate-700" title="Forces plan to behave as if today is the planned itinerary date to test animations!">
+                                    <input type="checkbox" id="force-simulate-today" class="rounded text-amber-500 focus:ring-amber-400 w-4 h-4 cursor-pointer" onchange="updateSkyScenery()">
+                                    <span class="text-amber-700">Simulate Travel Day</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Display Preferences card -->
                     <div class="bg-white border border-slate-200/80 p-6 rounded-2xl shadow-3xs">
                         <h3 class="cute-title text-base font-bold text-slate-700 flex items-center gap-2 mb-2">
@@ -1164,6 +1170,34 @@
         const SHOW_SCENERY_KEY = 'wanderplan_show_scenery_v1';
         const RAINY_PERIODS_KEY = 'wanderplan_rainy_periods_v1';
 
+        // Utility to calculate proper duration grammar spent between two times
+        function calculateDurationSpent(startTime, endTime) {
+            if (!startTime || !endTime) return '';
+            const start = timeStringToMinutes(startTime);
+            const end = timeStringToMinutes(endTime);
+            let diff = end - start;
+            if (diff < 0) {
+                diff += 1440; // Wrap around midnight
+            }
+            
+            const hrs = Math.floor(diff / 60);
+            const mins = diff % 60;
+            
+            let parts = [];
+            if (hrs > 0) {
+                parts.push(`${hrs} ${hrs === 1 ? 'hour' : 'hours'}`);
+            }
+            if (mins > 0) {
+                parts.push(`${mins} ${mins === 1 ? 'minute' : 'minutes'}`);
+            }
+            
+            if (parts.length === 0) {
+                return '(0 minutes spent)';
+            }
+            
+            return `(Total of ${parts.join(' and ')} spent)`;
+        }
+
         let itineraries = [];
         let activePlanId = null;
         let activePage = 'mainpage';
@@ -1373,6 +1407,7 @@
 
         function initIDB() {
             return new Promise((resolve, reject) => {
+                // Fixed: DB version bumped to 9 to match 'WanderPlanIDB_v9' and prevent silent VersionErrors!
                 const request = indexedDB.open(DB_NAME, 9);
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
@@ -3411,7 +3446,7 @@
                             </div>
                             <div>
                                 <div class="flex items-center gap-2">
-                                    <h3 class="cute-title text-lg font-bold text-slate-800">${escapeHTML(day.title)}</h3>
+                                    <h3 class="cute-title text-base sm:text-lg font-bold text-slate-800">${escapeHTML(day.title)} <span class="text-xs text-slate-400 font-semibold italic">(${totalRows} ${totalRows === 1 ? 'itinerary' : 'itineraries'} filed)</span></h3>
                                     <button onclick="triggerEditDayTitle(${dayIndex}, '${escapeJS(day.title)}')" class="text-slate-400 hover:text-amber-500 p-0.5 rounded transition">
                                         <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                                     </button>
@@ -3497,8 +3532,14 @@
                                                 <span class="inline-flex text-[10px] uppercase font-extrabold tracking-wide px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 select-none">
                                                     ${row.time ? formatTime12Hour(row.time) : 'Flexible'} ${row.endTime ? ' - ' + formatTime12Hour(row.endTime) : ''}
                                                 </span>
+
+                                                ${row.time && row.endTime ? `
+                                                    <span class="inline-flex text-[10px] text-slate-400 font-bold bg-slate-100/50 px-1.5 py-0.5 rounded-md select-none border border-slate-100">
+                                                        ${calculateDurationSpent(row.time, row.endTime)}
+                                                    </span>
+                                                ` : ''}
                                                 
-                                                <h4 class="font-bold text-sm sm:text-base text-slate-700 break-words ${isCompletedRow ? 'line-through text-slate-400 font-normal' : ''} ${isSkippedRow ? 'line-through text-slate-400 font-normal italic' : ''}">
+                                                <h4 class="font-bold text-sm sm:text-base text-slate-700 break-words w-full mt-1.5 ${isCompletedRow ? 'line-through text-slate-400 font-normal' : ''} ${isSkippedRow ? 'line-through text-slate-400 font-normal italic' : ''}">
                                                     ${row.activityType === 'transit' 
                                                         ? `🚘 Transit: <span class="text-blue-600">${escapeHTML(row.transitFrom)}</span> to <span class="text-rose-600">${escapeHTML(row.transitTo)}</span>`
                                                         : row.activityType === 'homebound'
@@ -3508,27 +3549,29 @@
                                                                 : escapeHTML(row.place)}
                                                 </h4>
 
-                                                ${isCompletedRow ? `
-                                                    <span class="text-[9px] bg-emerald-100 text-emerald-800 border border-emerald-200 px-1.5 py-0.5 rounded-md font-bold">Successfully Did It ✓</span>
-                                                ` : ''}
+                                                <div class="flex items-center gap-1.5 flex-wrap mt-1">
+                                                    ${isCompletedRow ? `
+                                                        <span class="text-[9px] bg-emerald-100 text-emerald-800 border border-emerald-200 px-1.5 py-0.5 rounded-md font-bold">Successfully Did It ✓</span>
+                                                    ` : ''}
 
-                                                ${isSkippedRow ? `
-                                                    <span class="text-[9px] bg-rose-100 text-rose-800 border border-rose-200 px-1.5 py-0.5 rounded-md font-bold italic">Skipped ✕</span>
-                                                ` : ''}
+                                                    ${isSkippedRow ? `
+                                                        <span class="text-[9px] bg-rose-100 text-rose-800 border border-rose-200 px-1.5 py-0.5 rounded-md font-bold italic">Skipped ✕</span>
+                                                    ` : ''}
 
-                                                ${hasEstimatedCost ? `
-                                                    <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 bg-amber-50 text-amber-700 rounded-lg border border-amber-100/50 shadow-3xs">
-                                                        <span>${costInfo.emoji}</span>
-                                                        <span>Est: ${currencySymbol}${parseFloat(row.cost).toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
-                                                    </span>
-                                                ` : ''}
+                                                    ${hasEstimatedCost ? `
+                                                        <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 bg-amber-50 text-amber-700 rounded-lg border border-amber-100/50 shadow-3xs">
+                                                            <span>${costInfo.emoji}</span>
+                                                            <span>Est: ${currencySymbol}${parseFloat(row.cost).toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
+                                                        </span>
+                                                    ` : ''}
 
-                                                ${hasActualSpent ? `
-                                                    <span class="inline-flex items-center gap-1 text-[11px] font-extrabold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-lg border border-emerald-200 shadow-3xs">
-                                                        <span>💵</span>
-                                                        <span>Spent: ${currencySymbol}${parseFloat(row.actualCost).toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
-                                                    </span>
-                                                ` : ''}
+                                                    ${hasActualSpent ? `
+                                                        <span class="inline-flex items-center gap-1 text-[11px] font-extrabold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-lg border border-emerald-200 shadow-3xs">
+                                                            <span>💵</span>
+                                                            <span>Spent: ${currencySymbol}${parseFloat(row.actualCost).toLocaleString(undefined, {maximumFractionDigits: 2})}</span>
+                                                        </span>
+                                                    ` : ''}
+                                                </div>
                                             </div>
 
                                             ${row.address ? `
@@ -4125,8 +4168,7 @@
                     itineraries: itineraries,
                     profiles: characterProfiles,
                     selectedCharId: activeCharacterIds,
-                    backgrounds: uploadedBackgrounds
-                };
+                    backgrounds: uploadedBackgrounds                };
                 
                 const backupString = JSON.stringify(backupPayload, null, 2);
 
@@ -4227,8 +4269,7 @@
                         importedItineraries = parsed.itineraries;
                         importedProfiles = parsed.profiles || [];
                         importedSelection = parsed.selectedCharId || [];
-                        importedBackgrounds = parsed.backgrounds || null;                    
-                    } else {
+                        importedBackgrounds = parsed.backgrounds || null;                    } else {
                         throw new Error("Backup file is missing travel itinerary lists.");
                     }
 
@@ -4445,45 +4486,44 @@
                     };
 
                     saveToStorage();
-                    activePlanId = null;
-                    renderPlansList();switchPage('mainpage');
+                    renderPlansList();
+                    updateGlobalStats();
+                    renderActivePlan();
+                    renderBackgroundPreviews();
+                    updateSkyScenery();
+                    renderWallpaperSlotsDeck();
+                    switchPage('mainpage');
                 }
             );
         }
 
-        function formatDate(dateStr) {
-            if (!dateStr) return '';
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
-            const date = new Date(dateStr);
-            return isNaN(date) ? dateStr : date.toLocaleDateString('en-US', options);
-        }
-
-        function formatTime12Hour(timeStr) {
-            if (!timeStr) return 'Flexible';
-            const [hours, minutes] = timeStr.split(':');
-            let h = parseInt(hours);
-            const ampm = h >= 12 ? 'PM' : 'AM';
-            h = h % 12;
-            h = h ? h : 12;
-            return `${String(h).padStart(2, '0')}:${minutes} ${ampm}`;
-        }
-
+        // Helper string escaped functions to prevent XSS
         function escapeHTML(str) {
             if (!str) return '';
             return str.replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag] || tag)
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
             );
         }
 
         function escapeJS(str) {
             if (!str) return '';
-            return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+            return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const d = new Date(dateStr);
+            if (isNaN(d)) return dateStr;
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function formatTime12Hour(timeStr) {
+            if (!timeStr) return '';
+            const [hh, mm] = timeStr.split(':').map(Number);
+            const ampm = hh >= 12 ? 'PM' : 'AM';
+            let displayHours = hh % 12;
+            if (displayHours === 0) displayHours = 12;
+            return `${displayHours}:${String(mm).padStart(2, '0')} ${ampm}`;
         }
     </script>
 </body>
